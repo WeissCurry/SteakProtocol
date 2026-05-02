@@ -8,11 +8,14 @@ skip-lint = false
 [programs.localnet]
 steak_contract = "BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak"
 
+[programs.devnet]
+steak_contract = "BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak"
+
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

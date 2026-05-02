@@ -24,7 +24,8 @@
 ### Smart Contract
 - **Language**: Rust
 - **Framework**: Anchor
-- **Program ID**: `BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak`
+- **Program ID**: [`BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak`](https://explorer.solana.com/address/BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak?cluster=devnet)
+- **Network**: Solana Devnet
 
 ### Frontend
 - **Framework**: React 19 + Vite
@@ -58,6 +59,13 @@
 4. Deploy to Localnet:
    ```bash
    solana-test-validator # In a separate terminal
+   anchor deploy
+   ```
+
+5. **Deploy to Devnet**:
+   ```bash
+   solana config set --url devnet
+   anchor build
    anchor deploy
    ```
 

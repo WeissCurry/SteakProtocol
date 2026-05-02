@@ -255,9 +255,18 @@ interface VaultCardProps {
   duration: number;
   roi: string;
   type: string;
+  onStake?: () => void;
+  isProcessing?: boolean;
 }
 
-export const VaultCard = ({ name, duration, roi, type }: VaultCardProps) => {
+export const VaultCard = ({
+  name,
+  duration,
+  roi,
+  type,
+  onStake,
+  isProcessing,
+}: VaultCardProps) => {
   const badgeColors: Record<number, string> = {
     30: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
     60: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
@@ -273,7 +282,7 @@ export const VaultCard = ({ name, duration, roi, type }: VaultCardProps) => {
       <div className="flex justify-between items-start">
         <div>
           <span
-            className={`text-[10px] uppercase font-black px-2 py-1 rounded-md border ${badgeColors[duration]}`}
+            className={`text-[10px] uppercase font-black px-2 py-1 rounded-md border ${badgeColors[duration] || badgeColors[30]}`}
           >
             {duration} DAYS LOCK
           </span>
@@ -289,8 +298,12 @@ export const VaultCard = ({ name, duration, roi, type }: VaultCardProps) => {
         <p className="text-3xl font-black text-emerald-400">{roi}</p>
       </div>
 
-      <button className="w-full py-4 bg-zinc-800 group-hover:bg-amber-500 text-white group-hover:text-zinc-950 font-bold rounded-2xl transition-all duration-300">
-        Stake IDRX
+      <button
+        disabled={isProcessing}
+        onClick={onStake}
+        className="w-full py-4 bg-zinc-800 group-hover:bg-amber-500 text-white group-hover:text-zinc-950 font-bold rounded-2xl transition-all duration-300 disabled:opacity-50"
+      >
+        {isProcessing ? 'PROCESSING...' : 'STAKE 1M IDRX'}
       </button>
     </div>
   );

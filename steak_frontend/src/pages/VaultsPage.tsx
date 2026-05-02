@@ -215,24 +215,16 @@ const VaultsPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
         {batches && batches.length > 0 ? (
           batches.map((b: ProgramAccount<BatchAccount>) => (
-            <div key={b.publicKey.toBase58()} className="relative group">
-              <VaultCard
-                id={b.account.batchId.toString()}
-                name={`Batch #${b.account.batchId.toString()} - ${b.account.isActive ? 'Active' : 'Funding'}`}
-                duration={Number(b.account.lockDuration) / (24 * 60 * 60)}
-                roi={b.account.isActive ? '32-45%' : 'Pending'}
-                type="Bulls & Goats"
-              />
-              <div className="absolute inset-x-0 bottom-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                <button
-                  disabled={isDeploying}
-                  onClick={() => handleStake(Number(b.account.batchId), 1000000)}
-                  className="w-full py-3 bg-amber-500 text-zinc-950 font-black rounded-xl shadow-xl hover:bg-amber-600 transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-50"
-                >
-                  {isDeploying ? 'PROCESSING...' : 'STAKE 1M IDRX'}
-                </button>
-              </div>
-            </div>
+            <VaultCard
+              key={b.publicKey.toBase58()}
+              id={b.account.batchId.toString()}
+              name={`Batch #${b.account.batchId.toString()} - ${b.account.isActive ? 'Active' : 'Funding'}`}
+              duration={Number(b.account.lockDuration) / (24 * 60 * 60)}
+              roi={b.account.isActive ? '32-45%' : 'Pending'}
+              type="Bulls & Goats"
+              onStake={() => handleStake(Number(b.account.batchId), 1000000)}
+              isProcessing={isDeploying}
+            />
           ))
         ) : (
           <div className="col-span-full py-20 flex flex-col items-center justify-center border-2 border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20">

@@ -1,38 +1,52 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './providers/AppProvider';
 import { MainLayout } from './layouts/MainLayout';
-import LandingPage from './pages/LandingPage';
-import VaultsPage from './pages/VaultsPage';
-import PortfolioPage from './pages/PortfolioPage';
-import AnalyticsPage from './pages/AnalyticsPage';
+
+// Lazy load pages
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+const VaultsPage = lazy(() => import('./pages/VaultsPage'));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
+
+// Loading component
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 const App = () => {
   return (
     <AppProvider>
-      <Routes>
-        {/* Landing Page Route */}
-        <Route path="/" element={<LandingPage />} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Landing Page Route */}
+          <Route path="/" element={<LandingPage />} />
 
-        {/* App Dashboard Routes */}
-        <Route
-          path="/app/*"
-          element={
-            <MainLayout>
-              <Routes>
-                <Route index element={<Navigate to="vaults" replace />} />
-                <Route path="vaults" element={<VaultsPage />} />
-                <Route path="portfolio" element={<PortfolioPage />} />
-                <Route path="analytics" element={<AnalyticsPage />} />
-                {/* Fallback for /app/* */}
-                <Route path="*" element={<Navigate to="vaults" replace />} />
-              </Routes>
-            </MainLayout>
-          }
-        />
+          {/* App Dashboard Routes */}
+          <Route
+            path="/app/*"
+            element={
+              <MainLayout>
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    <Route index element={<Navigate to="vaults" replace />} />
+                    <Route path="vaults" element={<VaultsPage />} />
+                    <Route path="portfolio" element={<PortfolioPage />} />
+                    <Route path="analytics" element={<AnalyticsPage />} />
+                    {/* Fallback for /app/* */}
+                    <Route path="*" element={<Navigate to="vaults" replace />} />
+                  </Routes>
+                </Suspense>
+              </MainLayout>
+            }
+          />
 
-        {/* Global Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Global Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
     </AppProvider>
   );
 };

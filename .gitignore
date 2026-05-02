@@ -5,6 +5,7 @@ node_modules/
 # Solana / Anchor
 steak_contract/target/
 steak_contract/.anchor/
+steak_contract/.anchor/
 steak_contract/test-ledger/
 **/*.so
 **/*.keypair.json

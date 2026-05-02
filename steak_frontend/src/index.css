@@ -25,13 +25,16 @@ body {
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #27272a;
   border-radius: 10px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
@@ -52,7 +55,8 @@ body {
 }
 
 .wallet-adapter-button:not([disabled]):hover {
-  background-color: #d97706 !important; /* amber-600 */
+  background-color: #d97706 !important;
+  /* amber-600 */
   transform: translateY(-1px);
 }
 
@@ -61,8 +65,10 @@ body {
 }
 
 .wallet-adapter-modal-wrapper {
-  background: #18181b !important; /* zinc-900 */
-  border: 1px solid #27272a !important; /* zinc-800 */
+  background: #18181b !important;
+  /* zinc-900 */
+  border: 1px solid #27272a !important;
+  /* zinc-800 */
   border-radius: 24px !important;
   font-family: inherit !important;
 }
@@ -73,7 +79,8 @@ body {
 }
 
 .wallet-adapter-modal-title {
-  color: #f4f4f5 !important; /* zinc-100 */
+  color: #f4f4f5 !important;
+  /* zinc-100 */
   font-weight: 900 !important;
   font-size: 1.5rem !important;
 }
@@ -100,7 +107,8 @@ body {
 }
 
 .wallet-adapter-dropdown-list-item {
-  color: #a1a1aa !important; /* zinc-400 */
+  color: #a1a1aa !important;
+  /* zinc-400 */
   font-weight: 500 !important;
   border-radius: 8px !important;
   padding: 8px 16px !important;

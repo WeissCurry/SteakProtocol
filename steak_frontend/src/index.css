@@ -2,8 +2,10 @@
 
 @theme {
   --color-grass-dark: #000000;
-  --color-grass-primary: #b5ff00; /* Neon Grass Green */
-  --color-grass-bg: #f8f9f2;    /* Creamy Off-white */
+  --color-grass-primary: #b5ff00;
+  /* Neon Grass Green */
+  --color-grass-bg: #f8f9f2;
+  /* Creamy Off-white */
   --color-grass-card: #ffffff;
   --color-grass-border: #000000;
   --color-grass-subtext: #4a4a4a;
@@ -120,4 +122,12 @@ body {
   border: 2px solid #000000 !important;
   box-shadow: 4px 4px 0px 0px #000000 !important;
   border-radius: 12px !important;
+}
+
+/* Grid Background Utility */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
 }

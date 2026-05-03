@@ -33,7 +33,7 @@ const PortfolioPage = () => {
   return (
     <>
       <div className="mb-10">
-        <h1 className="text-6xl font-black mb-4 uppercase tracking-tighter">My Portfolio 💼</h1>
+        <h1 className="text-4xl font-black mb-4 uppercase tracking-tighter">My Portfolio 💼</h1>
         <p className="text-grass-subtext max-w-2xl font-black uppercase text-sm tracking-tight leading-tight">
           Track your active stakes, pending rewards, and historical performance. 🐐🌿
         </p>
@@ -53,7 +53,7 @@ const PortfolioPage = () => {
             <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest mb-2">
               {stat.label}
             </p>
-            <h3 className="text-3xl font-black text-black italic tracking-tighter">{stat.value}</h3>
+            <h3 className="text-2xl font-black text-black italic tracking-tighter">{stat.value}</h3>
             <p className="text-[10px] font-black text-black/40 uppercase mt-1">{stat.sub}</p>
           </div>
         ))}
@@ -65,7 +65,7 @@ const PortfolioPage = () => {
             <div className="w-10 h-10 bg-black border-2 border-black flex items-center justify-center rounded-xl">
               <Briefcase size={22} className="text-grass-primary" />
             </div>
-            <h3 className="text-2xl font-black uppercase tracking-tighter italic">
+            <h3 className="text-xl font-black uppercase tracking-tighter italic">
               Your Active Series
             </h3>
           </div>

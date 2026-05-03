@@ -116,7 +116,7 @@ export const Sidebar = () => {
         <div className="w-10 h-10 bg-grass-primary border-2 border-black rounded-xl flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] group-hover:translate-x-[-1px] group-hover:translate-y-[-1px] group-hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
           <Beef className="text-black w-6 h-6" />
         </div>
-        <span className="text-2xl font-black tracking-tight text-black">STEAK</span>
+        <span className="text-xl font-black tracking-tight text-black">STEAK</span>
       </Link>
 
       <nav className="flex-1 space-y-3">
@@ -341,7 +341,7 @@ export const StatsRow = () => {
               {stat.label}
             </p>
             <div className="flex items-end justify-between mt-4">
-              <h3 className="text-3xl font-black text-black">{stat.value}</h3>
+              <h3 className="text-2xl font-black text-black">{stat.value}</h3>
               <span
                 className={`text-[10px] font-black px-3 py-1 rounded-full border-2 border-black bg-white ${stat.color}`}
               >
@@ -409,7 +409,7 @@ export const PerformanceCard = () => {
               Performance Index
             </span>
           </div>
-          <h2 className="text-5xl font-black mb-6 text-black uppercase tracking-tighter">
+          <h2 className="text-3xl font-black mb-6 text-black uppercase tracking-tighter">
             Grafik Imbal Hasil
           </h2>
           <p className="text-grass-subtext font-black text-sm mb-8 leading-relaxed max-w-xl uppercase tracking-tight">
@@ -421,7 +421,7 @@ export const PerformanceCard = () => {
               <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest mb-1">
                 Series SS001
               </p>
-              <p className="text-3xl font-black text-black">
+              <p className="text-2xl font-black text-black">
                 6.15% <span className="text-xs text-grass-subtext font-black">p.a</span>
               </p>
             </div>
@@ -429,7 +429,7 @@ export const PerformanceCard = () => {
               <p className="text-black text-[10px] font-black uppercase tracking-widest mb-1">
                 Series SS002
               </p>
-              <p className="text-3xl font-black text-black">
+              <p className="text-2xl font-black text-black">
                 6.40% <span className="text-xs text-black/60 font-black">p.a</span>
               </p>
             </div>
@@ -480,14 +480,14 @@ export const SukukCard = ({
           >
             {duration} HARI LOCK
           </span>
-          <h4 className="text-3xl font-black mt-6 text-black uppercase tracking-tighter">{name}</h4>
+          <h4 className="text-2xl font-black mt-6 text-black uppercase tracking-tighter">{name}</h4>
         </div>
         <div className="text-right">
           <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest">
             Fixed Rate
           </p>
           <div className="bg-grass-primary border-2 border-black px-4 py-1 mt-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-            <p className="text-2xl font-black text-black">{roi}</p>
+            <p className="text-xl font-black text-black">{roi}</p>
           </div>
         </div>
       </div>

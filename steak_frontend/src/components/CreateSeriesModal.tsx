@@ -26,7 +26,7 @@ export const CreateSeriesModal = ({
         <div className="p-10">
           <div className="flex justify-between items-center mb-10">
             <div>
-              <h3 className="text-3xl font-black text-black uppercase tracking-tighter">
+              <h3 className="text-xl font-black text-black uppercase tracking-tighter">
                 Buka Seri Baru
               </h3>
               <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest mt-1">
@@ -108,7 +108,7 @@ export const CreateSeriesModal = ({
           <button
             onClick={() => onSubmit(days, capacity, apy)}
             disabled={isProcessing}
-            className="w-full mt-12 py-6 bg-grass-primary text-black border-2 border-black disabled:opacity-50 font-black rounded-none transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none flex items-center justify-center gap-2 text-xl uppercase tracking-widest"
+            className="w-full mt-12 py-5 bg-grass-primary text-black border-2 border-black disabled:opacity-50 font-black rounded-none transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none flex items-center justify-center gap-2 text-lg uppercase tracking-widest"
           >
             {isProcessing ? 'MEMPROSES...' : 'AKTIFKAN SERI'}
           </button>

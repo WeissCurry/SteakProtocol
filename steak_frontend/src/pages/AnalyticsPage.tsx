@@ -53,7 +53,7 @@ const AnalyticsPage = () => {
   return (
     <>
       <div className="mb-10">
-        <h1 className="text-6xl font-black mb-4 uppercase tracking-tighter">
+        <h1 className="text-4xl font-black mb-4 uppercase tracking-tighter">
           Protocol Activities 📝
         </h1>
         <p className="text-grass-subtext max-w-2xl font-black uppercase text-sm tracking-tight leading-tight">
@@ -75,7 +75,7 @@ const AnalyticsPage = () => {
             <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest mb-1">
               {metric.label}
             </p>
-            <h3 className="text-3xl font-black text-black uppercase tracking-tighter">
+            <h3 className="text-2xl font-black text-black uppercase tracking-tighter">
               {metric.value}
             </h3>
           </div>
@@ -126,7 +126,7 @@ const AnalyticsPage = () => {
                 </div>
 
                 <div className="text-right">
-                  <p className="text-xl font-black text-black mb-1">
+                  <p className="text-lg font-black text-black mb-1">
                     +{activity.amount.toLocaleString()} <span className="text-[10px]">IDRX</span>
                   </p>
                   <div className="flex items-center justify-end gap-1 text-emerald-600">

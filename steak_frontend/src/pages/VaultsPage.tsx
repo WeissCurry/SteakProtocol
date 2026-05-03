@@ -253,13 +253,13 @@ const VaultsPage = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <h1 className="text-6xl font-black text-black uppercase tracking-tighter leading-none">
+            <h1 className="text-4xl font-black text-black uppercase tracking-tighter leading-none">
               Steak <br />
               <span className="text-white bg-black px-4 shadow-[6px_6px_0px_0px_rgba(181,255,0,1)]">
                 Earn
               </span>
             </h1>
-            <span className="text-4xl animate-bounce">🐐</span>
+            <span className="text-3xl animate-bounce">🐐</span>
           </div>
           <p className="text-grass-subtext max-w-2xl font-black text-sm uppercase tracking-tight leading-tight">
             Investasikan aset Anda pada <b>Earn Program</b>. Dapatkan imbal hasil harian dari
@@ -274,19 +274,19 @@ const VaultsPage = () => {
         <div className="flex gap-4">
           <button
             onClick={() => setShowSetup(!showSetup)}
-            className="flex items-center gap-2 px-8 py-4 bg-white border-2 border-black text-xs font-black rounded-xl hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-black uppercase tracking-widest"
+            className="flex items-center gap-2 px-6 py-4 bg-white border-2 border-black text-xs font-black rounded-xl hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-black uppercase tracking-widest whitespace-nowrap"
           >
             <Wrench size={16} className="text-blue-600" />
-            ADMIN TOOLS
+            ADMIN
           </button>
 
           <button
             disabled={isDeploying}
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-8 py-4 bg-grass-primary text-black border-2 border-black text-xs font-black rounded-xl hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all disabled:opacity-50 uppercase tracking-widest"
+            className="flex items-center gap-2 px-6 py-4 bg-grass-primary text-black border-2 border-black text-xs font-black rounded-xl hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all disabled:opacity-50 uppercase tracking-widest whitespace-nowrap"
           >
             <Plus size={16} />
-            {isDeploying ? '...' : 'BUKA SERI BARU'}
+            {isDeploying ? '...' : 'BUKA SERI'}
           </button>
         </div>
       </div>
@@ -295,7 +295,7 @@ const VaultsPage = () => {
       {showSetup && (
         <div className="mb-10 p-10 bg-white border-4 border-black rounded-none shadow-[12px_12px_0px_0px_rgba(59,130,246,1)] animate-in slide-in-from-top-4 duration-300">
           <div className="flex items-center justify-between mb-6">
-            <h4 className="text-2xl font-black text-black uppercase tracking-tighter flex items-center gap-3">
+            <h4 className="text-xl font-black text-black uppercase tracking-tighter flex items-center gap-3">
               <Wrench size={24} className="text-blue-600" />
               Quick Setup (Admin Only)
             </h4>
@@ -334,7 +334,7 @@ const VaultsPage = () => {
 
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 border-b-4 border-black pb-6">
         <div className="flex items-center gap-3">
-          <h2 className="text-2xl font-black uppercase tracking-tighter italic">Staking Pools</h2>
+          <h2 className="text-xl font-black uppercase tracking-tighter italic">Staking Pools</h2>
           {isLoading && <RefreshCw size={20} className="animate-spin text-grass-subtext" />}
         </div>
         <div className="flex gap-2">

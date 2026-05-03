@@ -101,8 +101,11 @@ describe("steak_contract", () => {
       program.programId
     );
 
+    const maxCapacity = new anchor.BN(5_000_000_000);
+    const apy = new anchor.BN(615); // 6.15%
+
     await program.methods
-      .createBatch(batchId, lockDuration)
+      .createBatch(batchId, lockDuration, maxCapacity, apy)
       .accounts({
         batch,
         batchVault,

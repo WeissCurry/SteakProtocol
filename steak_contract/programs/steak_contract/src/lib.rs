@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak");
+declare_id!("GY3PgUAPuXte7ZH7VUjixuSn4pKqLDsfREitaqbu6zmA");
 
 #[program]
 pub mod steak_contract {
@@ -19,6 +19,8 @@ pub mod steak_contract {
         ctx: Context<CreateBatch>,
         batch_id: u64,
         lock_duration: u64,
+        max_capacity: u64,
+        apy: u64,
     ) -> Result<()> {
         let batch = &mut ctx.accounts.batch;
         batch.batch_id = batch_id;
@@ -29,6 +31,8 @@ pub mod steak_contract {
         batch.final_revenue = 0;
         batch.is_harvested = false;
         batch.bump = ctx.bumps.batch;
+        batch.max_capacity = max_capacity;
+        batch.apy = apy;
         Ok(())
     }
 
@@ -38,6 +42,10 @@ pub mod steak_contract {
         // Constraints
         require!(!batch.is_active, SteakError::BatchAlreadyStarted);
         require!(!batch.is_harvested, SteakError::BatchAlreadyHarvested);
+        require!(
+            batch.total_staked.checked_add(amount).ok_or(SteakError::MathOverflow)? <= batch.max_capacity,
+            SteakError::CapacityReached
+        );
 
         // Transfer USDC to Batch Vault
         let cpi_accounts = Transfer {
@@ -171,7 +179,7 @@ pub struct CreateBatch<'info> {
     #[account(
         init,
         payer = admin,
-        space = 8 + 8 + 8 + 8 + 1 + 8 + 8 + 1 + 1,
+        space = 8 + 8 + 8 + 8 + 1 + 8 + 8 + 1 + 1 + 8 + 8, // Added space for max_capacity and apy
         seeds = [b"batch", batch_id.to_le_bytes().as_ref()],
         bump
     )]
@@ -289,6 +297,8 @@ pub struct Batch {
     pub final_revenue: u64,
     pub is_harvested: bool,
     pub bump: u8,
+    pub max_capacity: u64,
+    pub apy: u64, // APY in basis points (e.g., 500 = 5%)
 }
 
 #[account]
@@ -315,4 +325,6 @@ pub enum SteakError {
     AlreadyClaimed,
     #[msg("Math overflow or division by zero")]
     MathOverflow,
+    #[msg("Series capacity has been reached")]
+    CapacityReached,
 }

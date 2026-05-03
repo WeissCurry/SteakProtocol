@@ -6,10 +6,10 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-steak_contract = "BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak"
+steak_contract = "GY3PgUAPuXte7ZH7VUjixuSn4pKqLDsfREitaqbu6zmA"
 
 [programs.devnet]
-steak_contract = "BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak"
+steak_contract = "GY3PgUAPuXte7ZH7VUjixuSn4pKqLDsfREitaqbu6zmA"
 
 [registry]
 url = "https://api.apr.dev"

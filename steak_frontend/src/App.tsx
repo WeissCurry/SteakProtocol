@@ -5,7 +5,7 @@ import { MainLayout } from './layouts/MainLayout';
 
 // Lazy load pages
 const LandingPage = lazy(() => import('./pages/LandingPage'));
-const VaultsPage = lazy(() => import('./pages/VaultsPage'));
+const EarnPage = lazy(() => import('./pages/VaultsPage'));
 const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 
@@ -31,12 +31,12 @@ const App = () => {
               <MainLayout>
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
-                    <Route index element={<Navigate to="vaults" replace />} />
-                    <Route path="vaults" element={<VaultsPage />} />
+                    <Route index element={<Navigate to="earn" replace />} />
+                    <Route path="earn" element={<EarnPage />} />
                     <Route path="portfolio" element={<PortfolioPage />} />
                     <Route path="analytics" element={<AnalyticsPage />} />
                     {/* Fallback for /app/* */}
-                    <Route path="*" element={<Navigate to="vaults" replace />} />
+                    <Route path="*" element={<Navigate to="earn" replace />} />
                   </Routes>
                 </Suspense>
               </MainLayout>

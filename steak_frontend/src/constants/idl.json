@@ -1,5 +1,5 @@
 {
-  "address": "BRtHP3yGJNVyBi3mvYBvNFu4fTQevF6TJ6avX98KNSak",
+  "address": "GY3PgUAPuXte7ZH7VUjixuSn4pKqLDsfREitaqbu6zmA",
   "metadata": {
     "name": "steak_contract",
     "version": "0.1.0",
@@ -9,7 +9,16 @@
   "instructions": [
     {
       "name": "claim",
-      "discriminator": [62, 198, 214, 193, 213, 159, 108, 210],
+      "discriminator": [
+        62,
+        198,
+        214,
+        193,
+        213,
+        159,
+        108,
+        210
+      ],
       "accounts": [
         {
           "name": "batch",
@@ -22,7 +31,19 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [98, 97, 116, 99, 104, 95, 118, 97, 117, 108, 116]
+                "value": [
+                  98,
+                  97,
+                  116,
+                  99,
+                  104,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
               },
               {
                 "kind": "account",
@@ -39,7 +60,18 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [117, 115, 101, 114, 95, 115, 116, 97, 107, 101]
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
               },
               {
                 "kind": "account",
@@ -71,7 +103,16 @@
     },
     {
       "name": "create_batch",
-      "discriminator": [159, 198, 248, 43, 248, 31, 235, 86],
+      "discriminator": [
+        159,
+        198,
+        248,
+        43,
+        248,
+        31,
+        235,
+        86
+      ],
       "accounts": [
         {
           "name": "batch",
@@ -80,7 +121,13 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [98, 97, 116, 99, 104]
+                "value": [
+                  98,
+                  97,
+                  116,
+                  99,
+                  104
+                ]
               },
               {
                 "kind": "arg",
@@ -96,7 +143,19 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [98, 97, 116, 99, 104, 95, 118, 97, 117, 108, 116]
+                "value": [
+                  98,
+                  97,
+                  116,
+                  99,
+                  104,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
               },
               {
                 "kind": "arg",
@@ -134,12 +193,29 @@
         {
           "name": "lock_duration",
           "type": "u64"
+        },
+        {
+          "name": "max_capacity",
+          "type": "u64"
+        },
+        {
+          "name": "apy",
+          "type": "u64"
         }
       ]
     },
     {
       "name": "harvest_batch",
-      "discriminator": [129, 22, 248, 16, 210, 170, 106, 219],
+      "discriminator": [
+        129,
+        22,
+        248,
+        16,
+        210,
+        170,
+        106,
+        219
+      ],
       "accounts": [
         {
           "name": "global_state",
@@ -160,7 +236,9 @@
         {
           "name": "admin",
           "signer": true,
-          "relations": ["global_state"]
+          "relations": [
+            "global_state"
+          ]
         },
         {
           "name": "token_program",
@@ -176,7 +254,16 @@
     },
     {
       "name": "initialize_protocol",
-      "discriminator": [188, 233, 252, 106, 134, 146, 202, 91],
+      "discriminator": [
+        188,
+        233,
+        252,
+        106,
+        134,
+        146,
+        202,
+        91
+      ],
       "accounts": [
         {
           "name": "global_state",
@@ -185,7 +272,20 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 108, 111, 98, 97, 108, 95, 115, 116, 97, 116, 101]
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
               }
             ]
           }
@@ -207,7 +307,16 @@
     },
     {
       "name": "stake",
-      "discriminator": [206, 176, 202, 18, 200, 209, 179, 108],
+      "discriminator": [
+        206,
+        176,
+        202,
+        18,
+        200,
+        209,
+        179,
+        108
+      ],
       "accounts": [
         {
           "name": "batch",
@@ -216,7 +325,13 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [98, 97, 116, 99, 104]
+                "value": [
+                  98,
+                  97,
+                  116,
+                  99,
+                  104
+                ]
               },
               {
                 "kind": "arg",
@@ -232,7 +347,19 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [98, 97, 116, 99, 104, 95, 118, 97, 117, 108, 116]
+                "value": [
+                  98,
+                  97,
+                  116,
+                  99,
+                  104,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
               },
               {
                 "kind": "arg",
@@ -248,7 +375,18 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [117, 115, 101, 114, 95, 115, 116, 97, 107, 101]
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
               },
               {
                 "kind": "account",
@@ -296,7 +434,16 @@
     },
     {
       "name": "start_batch",
-      "discriminator": [147, 69, 236, 227, 64, 168, 57, 68],
+      "discriminator": [
+        147,
+        69,
+        236,
+        227,
+        64,
+        168,
+        57,
+        68
+      ],
       "accounts": [
         {
           "name": "global_state",
@@ -309,7 +456,9 @@
         {
           "name": "admin",
           "signer": true,
-          "relations": ["global_state"]
+          "relations": [
+            "global_state"
+          ]
         }
       ],
       "args": []
@@ -318,15 +467,42 @@
   "accounts": [
     {
       "name": "Batch",
-      "discriminator": [156, 194, 70, 44, 22, 88, 137, 44]
+      "discriminator": [
+        156,
+        194,
+        70,
+        44,
+        22,
+        88,
+        137,
+        44
+      ]
     },
     {
       "name": "GlobalState",
-      "discriminator": [163, 46, 74, 168, 216, 123, 133, 98]
+      "discriminator": [
+        163,
+        46,
+        74,
+        168,
+        216,
+        123,
+        133,
+        98
+      ]
     },
     {
       "name": "UserStake",
-      "discriminator": [102, 53, 163, 107, 9, 138, 87, 153]
+      "discriminator": [
+        102,
+        53,
+        163,
+        107,
+        9,
+        138,
+        87,
+        153
+      ]
     }
   ],
   "errors": [
@@ -364,6 +540,11 @@
       "code": 6006,
       "name": "MathOverflow",
       "msg": "Math overflow or division by zero"
+    },
+    {
+      "code": 6007,
+      "name": "CapacityReached",
+      "msg": "Series capacity has been reached"
     }
   ],
   "types": [
@@ -403,6 +584,14 @@
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "max_capacity",
+            "type": "u64"
+          },
+          {
+            "name": "apy",
+            "type": "u64"
           }
         ]
       }

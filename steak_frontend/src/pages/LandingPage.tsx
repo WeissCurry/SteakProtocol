@@ -18,31 +18,25 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white font-sans selection:bg-amber-500/30 selection:text-amber-500">
+    <div className="min-h-screen bg-grass-bg text-black font-sans selection:bg-grass-primary selection:text-black">
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-md">
+      <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b-4 border-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
-            <Beef className="text-zinc-950 w-6 h-6" />
+          <div className="w-12 h-12 bg-grass-primary border-2 border-black rounded-none flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <Beef className="text-black w-8 h-8" />
           </div>
-          <span className="text-2xl font-bold tracking-tight">STEAK</span>
+          <span className="text-3xl font-black tracking-tight uppercase">STEAK</span>
         </div>
         <Link
           to="/app"
-          className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-bold rounded-xl transition-all border border-zinc-700"
+          className="px-8 py-3 bg-grass-primary text-black border-2 border-black font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
         >
           Launch App
         </Link>
       </nav>
 
       {/* Hero Section */}
-      <section className="px-8 pt-20 pb-32 max-w-7xl mx-auto text-center relative overflow-hidden">
-        {/* Decorative Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/10 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full animate-pulse" />
-        </div>
-
+      <section className="px-8 pt-32 pb-48 max-w-7xl mx-auto text-center relative overflow-hidden">
         <motion.div
           initial="initial"
           animate="animate"
@@ -51,59 +45,58 @@ const LandingPage = () => {
         >
           <motion.div
             variants={fadeIn}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 mb-8"
+            className="inline-flex items-center gap-2 px-6 py-2 bg-white border-2 border-black mb-12 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           >
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-            <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">
-              Mainnet is Live
+            <span className="w-3 h-3 bg-grass-primary border border-black animate-ping" />
+            <span className="text-xs font-black uppercase tracking-widest">
+              Devnet is Live 🐐🛠️
             </span>
           </motion.div>
 
           <motion.h1
             variants={fadeIn}
-            className="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6"
+            className="text-8xl md:text-[160px] font-black tracking-tighter leading-[0.8] mb-12 uppercase text-black"
           >
-            STAKE YOUR <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-emerald-400">
-              ANIMAL ASSETS
+            Investasi <br />
+            <span className="bg-grass-primary border-4 border-black px-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+              Masa Depan
             </span>
           </motion.h1>
 
           <motion.p
             variants={fadeIn}
-            className="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-2xl text-black max-w-3xl mx-auto mb-16 leading-tight font-black uppercase tracking-tight"
           >
-            The first Solana-powered protocol for <b>Real World Animal</b> (RWA) livestock
-            fattening. Bridge digital liquidity to physical agricultural commerce with 50/50 profit
-            sharing.
+            Protokol RWA pertama di Solana untuk aset peternakan. Dapatkan imbal hasil stabil dengan
+            aset fisik terverifikasi. 🌿🐄🐐
           </motion.p>
 
           <motion.div
             variants={fadeIn}
-            className="flex flex-col md:flex-row items-center justify-center gap-4"
+            className="flex flex-col md:flex-row items-center justify-center gap-8"
           >
             <Link
               to="/app"
-              className="group px-10 py-5 bg-amber-500 text-zinc-950 text-xl font-black rounded-2xl flex items-center gap-3 hover:bg-amber-600 transition-all transform active:scale-95 shadow-xl shadow-amber-500/20"
+              className="group px-16 py-8 bg-grass-primary text-black text-2xl font-black border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all uppercase flex items-center gap-4"
             >
-              Start Staking IDRX
-              <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+              Mulai Earn
+              <ArrowRight size={32} className="group-hover:translate-x-2 transition-transform" />
             </Link>
-            <button className="px-10 py-5 bg-zinc-900 text-white text-xl font-bold rounded-2xl border border-zinc-800 hover:bg-zinc-800 transition-all">
-              Read Litepaper
+            <button className="px-16 py-8 bg-white text-black text-2xl font-black border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] transition-all uppercase">
+              Prospektus
             </button>
           </motion.div>
         </motion.div>
       </section>
 
       {/* Stats Section */}
-      <section className="px-8 py-20 bg-zinc-900/30 border-y border-zinc-900">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="px-8 py-32 bg-white border-y-4 border-black">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-16">
           {[
-            { label: 'Total Value Locked', value: '$12.4M+' },
+            { label: 'Total Value Staked', value: 'Rp 12.4M+' },
             { label: 'Active Livestock', value: '45,000+' },
-            { label: 'Real Yield Paid', value: '$2.1M+' },
-            { label: 'Security Score', value: '98/100' },
+            { label: 'Yield Paid', value: 'Rp 2.1M+' },
+            { label: 'Safety Rating', value: 'AA+' },
           ].map((stat, i) => (
             <motion.div
               key={i}
@@ -111,45 +104,50 @@ const LandingPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="text-center"
+              className="text-center bg-grass-bg border-2 border-black p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
             >
-              <p className="text-zinc-500 text-sm font-bold uppercase tracking-widest mb-2">
+              <p className="text-grass-subtext text-xs font-black uppercase tracking-widest mb-4">
                 {stat.label}
               </p>
-              <h3 className="text-3xl md:text-4xl font-black text-white">{stat.value}</h3>
+              <h3 className="text-4xl font-black text-black uppercase tracking-tighter">
+                {stat.value}
+              </h3>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="px-8 py-32 max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-black mb-6">Why Steak Protocol?</h2>
-          <p className="text-zinc-400 text-xl max-w-2xl mx-auto">
-            Traditional agricultural yields, accelerated by Solana's high-speed infrastructure.
+      <section className="px-8 py-40 max-w-7xl mx-auto">
+        <div className="text-center mb-32">
+          <h2 className="text-7xl md:text-9xl font-black mb-8 text-black uppercase tracking-tighter leading-none">
+            Keuntungan <br />
+            <span className="text-grass-primary">Steak Earn</span>
+          </h2>
+          <p className="text-black text-2xl max-w-3xl mx-auto font-black uppercase tracking-tight">
+            Stabilitas tradisional bertemu dengan infrastruktur Solana yang cepat.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
             {
-              title: 'Real Yield',
-              desc: 'Earnings come from physical commerce, not token emissions or inflation.',
+              title: 'Fixed Rate Yield',
+              desc: 'Imbal hasil yang pasti dan dibayarkan langsung ke wallet Anda dalam IDRX.',
               icon: TrendingUp,
-              color: 'text-emerald-400',
+              color: 'bg-emerald-400',
             },
             {
-              title: 'Solana Speed',
-              desc: 'Instant settlement and fractional ownership of livestock assets.',
+              title: 'Aset Fisik Nyata',
+              desc: 'Setiap seri staking didukung oleh hewan ternak fisik yang berasuransi.',
               icon: Zap,
-              color: 'text-amber-400',
+              color: 'bg-grass-primary',
             },
             {
-              title: 'Fully Insured',
-              desc: 'Our livestock assets are 100% insured against disease and natural loss.',
+              title: 'Sertifikat NFT',
+              desc: 'Terima bukti kepemilikan digital dalam bentuk NFT yang transparan.',
               icon: Shield,
-              color: 'text-blue-400',
+              color: 'bg-blue-400',
             },
           ].map((feature, i) => (
             <motion.div
@@ -158,32 +156,44 @@ const LandingPage = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl hover:border-zinc-700 transition-colors group"
+              className="p-12 bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[18px_18px_0px_0px_rgba(0,0,0,1)] transition-all group"
             >
               <div
-                className={`w-14 h-14 rounded-2xl bg-zinc-800 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${feature.color}`}
+                className={`w-20 h-20 border-2 border-black flex items-center justify-center mb-10 group-hover:rotate-12 transition-transform ${feature.color}`}
               >
-                <feature.icon size={32} />
+                <feature.icon size={40} className="text-black" />
               </div>
-              <h4 className="text-2xl font-bold mb-4">{feature.title}</h4>
-              <p className="text-zinc-400 leading-relaxed">{feature.desc}</p>
+              <h4 className="text-3xl font-black mb-6 text-black uppercase tracking-tighter">
+                {feature.title}
+              </h4>
+              <p className="text-black font-black uppercase text-sm leading-snug">{feature.desc}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="px-8 py-20 border-t border-zinc-900 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-        <div className="flex items-center gap-3">
-          <Beef className="text-amber-500 w-8 h-8" />
-          <span className="text-xl font-bold tracking-tight">STEAK</span>
-        </div>
-        <p className="text-zinc-600 text-sm italic">
-          Built for the future of decentralized agricultural finance.
-        </p>
-        <div className="flex gap-6">
-          <Globe className="text-zinc-400 hover:text-white cursor-pointer transition-colors" />
-          <Zap className="text-zinc-400 hover:text-white cursor-pointer transition-colors" />
+      <footer className="px-8 py-32 border-t-4 border-black bg-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-black border-2 border-grass-primary flex items-center justify-center">
+              <Beef className="text-grass-primary w-10 h-10" />
+            </div>
+            <span className="text-4xl font-black tracking-tight uppercase">STEAK</span>
+          </div>
+          <p className="text-black text-lg font-black uppercase tracking-tight max-w-md text-center md:text-left leading-none">
+            Membangun masa depan keuangan agrikultur yang terdesentralisasi. 🐐🌱🐄
+          </p>
+          <div className="flex gap-10">
+            <Globe
+              className="text-black hover:text-grass-primary cursor-pointer transition-colors"
+              size={32}
+            />
+            <Zap
+              className="text-black hover:text-grass-primary cursor-pointer transition-colors"
+              size={32}
+            />
+          </div>
         </div>
       </footer>
     </div>

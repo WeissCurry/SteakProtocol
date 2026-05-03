@@ -9,6 +9,8 @@ export interface BatchAccount {
   finalRevenue: anchor.BN;
   isHarvested: boolean;
   bump: number;
+  maxCapacity: anchor.BN;
+  apy: anchor.BN;
 }
 
 export interface ProgramAccount<T> {

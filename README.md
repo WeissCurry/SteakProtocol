@@ -2,7 +2,7 @@
 
 Steak Protocol is a decentralized Real World Asset (RWA) platform on the Solana blockchain, focused on the livestock industry in Indonesia. It allows users to invest in verified physical assets (Goats and Cows) and earn stable yields (Fixed Rate APY) paid in IDRX.
 
-![Steak Protocol Logo](steak_frontend/public/SteakProtocolLogo.png)
+![Steak Protocol Logo](steak_frontend/public/SteakProtocolLogoBg.jpeg)
 
 ## 🌟 Key Features
 

@@ -8,6 +8,7 @@ const LandingPage = lazy(() => import('./pages/LandingPage'));
 const EarnPage = lazy(() => import('./pages/VaultsPage'));
 const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 // Loading component
 const PageLoader = () => (
@@ -35,6 +36,7 @@ const App = () => {
                     <Route path="earn" element={<EarnPage />} />
                     <Route path="portfolio" element={<PortfolioPage />} />
                     <Route path="analytics" element={<AnalyticsPage />} />
+                    <Route path="admin" element={<AdminPage />} />
                     {/* Fallback for /app/* */}
                     <Route path="*" element={<Navigate to="earn" replace />} />
                   </Routes>

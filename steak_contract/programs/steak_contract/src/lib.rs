@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
+use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer, MintTo};
 
-declare_id!("GY3PgUAPuXte7ZH7VUjixuSn4pKqLDsfREitaqbu6zmA");
+declare_id!("3GuFxJRfywTENWeTKSC8jjNNwMNPqv4aGYd8SiY6aDP4");
 
 #[program]
 pub mod steak_contract {
@@ -15,12 +15,34 @@ pub mod steak_contract {
         Ok(())
     }
 
+    pub fn faucet(ctx: Context<Faucet>, amount: u64) -> Result<()> {
+        let seeds = &[b"mint_authority".as_ref(), &[ctx.bumps.mint_authority]];
+        let signer = &[&seeds[..]];
+
+        token::mint_to(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                MintTo {
+                    mint: ctx.accounts.mint.to_account_info(),
+                    to: ctx.accounts.user_ata.to_account_info(),
+                    authority: ctx.accounts.mint_authority.to_account_info(),
+                },
+                signer,
+            ),
+            amount,
+        )?;
+        Ok(())
+    }
+
     pub fn create_batch(
         ctx: Context<CreateBatch>,
         batch_id: u64,
         lock_duration: u64,
         max_capacity: u64,
         apy: u64,
+        goats: u64,
+        cows: u64,
+        name: String,
     ) -> Result<()> {
         let batch = &mut ctx.accounts.batch;
         batch.batch_id = batch_id;
@@ -33,6 +55,9 @@ pub mod steak_contract {
         batch.bump = ctx.bumps.batch;
         batch.max_capacity = max_capacity;
         batch.apy = apy;
+        batch.goats = goats;
+        batch.cows = cows;
+        batch.name = name;
         Ok(())
     }
 
@@ -40,6 +65,7 @@ pub mod steak_contract {
         let batch = &mut ctx.accounts.batch;
         
         // Constraints
+        require!(amount > 0, SteakError::InvalidAmount);
         require!(!batch.is_active, SteakError::BatchAlreadyStarted);
         require!(!batch.is_harvested, SteakError::BatchAlreadyHarvested);
         require!(
@@ -69,6 +95,14 @@ pub mod steak_contract {
         let global_state = &mut ctx.accounts.global_state;
         global_state.total_tvl = global_state.total_tvl.checked_add(amount).ok_or(SteakError::MathOverflow)?;
 
+        // Emit event for frontend/indexer tracking (This acts as the NFT "mint" trigger)
+        emit!(StakeEvent {
+            user: ctx.accounts.user.key(),
+            batch_id: batch.batch_id,
+            amount,
+            timestamp: Clock::get()?.unix_timestamp as u64,
+        });
+
         Ok(())
     }
 
@@ -76,6 +110,28 @@ pub mod steak_contract {
         let batch = &mut ctx.accounts.batch;
         batch.is_active = true;
         batch.start_time = Clock::get()?.unix_timestamp as u64;
+
+        // Transfer all accumulated IDRX from batch_vault to admin_token_account
+        let amount = ctx.accounts.batch_vault.amount;
+        if amount > 0 {
+            let batch_id_bytes = batch.batch_id.to_le_bytes();
+            let seeds = &[
+                b"batch_vault",
+                batch_id_bytes.as_ref(),
+                &[ctx.bumps.batch_vault],
+            ];
+            let signer = &[&seeds[..]];
+
+            let cpi_accounts = Transfer {
+                from: ctx.accounts.batch_vault.to_account_info(),
+                to: ctx.accounts.admin_token_account.to_account_info(),
+                authority: ctx.accounts.batch_vault.to_account_info(),
+            };
+            let cpi_program = ctx.accounts.token_program.to_account_info();
+            let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer);
+            token::transfer(cpi_ctx, amount)?;
+        }
+
         Ok(())
     }
 
@@ -137,7 +193,7 @@ pub mod steak_contract {
         let seeds = &[
             b"batch_vault",
             batch_id_bytes.as_ref(),
-            &[batch.bump],
+            &[ctx.bumps.batch_vault],
         ];
         let signer = &[&seeds[..]];
 
@@ -179,7 +235,7 @@ pub struct CreateBatch<'info> {
     #[account(
         init,
         payer = admin,
-        space = 8 + 8 + 8 + 8 + 1 + 8 + 8 + 1 + 1 + 8 + 8, // Added space for max_capacity and apy
+        space = 8 + 8 + 8 + 8 + 1 + 8 + 8 + 1 + 1 + 8 + 8 + 8 + 8 + (4 + 32), // Added space for name (32 chars max)
         seeds = [b"batch", batch_id.to_le_bytes().as_ref()],
         bump
     )]
@@ -187,13 +243,13 @@ pub struct CreateBatch<'info> {
     #[account(
         init,
         payer = admin,
-        token::mint = usdc_mint,
+        token::mint = token_mint,
         token::authority = batch_vault,
         seeds = [b"batch_vault", batch_id.to_le_bytes().as_ref()],
         bump
     )]
     pub batch_vault: Account<'info, TokenAccount>,
-    pub usdc_mint: Account<'info, Mint>,
+    pub token_mint: Account<'info, Mint>,
     #[account(mut)]
     pub admin: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -240,7 +296,17 @@ pub struct AdminOnly<'info> {
     pub global_state: Account<'info, GlobalState>,
     #[account(mut)]
     pub batch: Account<'info, Batch>,
+    #[account(
+        mut,
+        seeds = [b"batch_vault", batch.batch_id.to_le_bytes().as_ref()],
+        bump
+    )]
+    pub batch_vault: Account<'info, TokenAccount>,
+    #[account(mut)]
+    pub admin_token_account: Account<'info, TokenAccount>,
+    #[account(mut)]
     pub admin: Signer<'info>,
+    pub token_program: Program<'info, Token>,
 }
 
 #[derive(Accounts)]
@@ -299,6 +365,9 @@ pub struct Batch {
     pub bump: u8,
     pub max_capacity: u64,
     pub apy: u64, // APY in basis points (e.g., 500 = 5%)
+    pub goats: u64,
+    pub cows: u64,
+    pub name: String,
 }
 
 #[account]
@@ -307,6 +376,14 @@ pub struct UserStake {
     pub batch_id: u64,
     pub amount_staked: u64,
     pub has_claimed: bool,
+}
+
+#[event]
+pub struct StakeEvent {
+    pub user: Pubkey,
+    pub batch_id: u64,
+    pub amount: u64,
+    pub timestamp: u64,
 }
 
 #[error_code]
@@ -327,4 +404,27 @@ pub enum SteakError {
     MathOverflow,
     #[msg("Series capacity has been reached")]
     CapacityReached,
+    #[msg("Invalid staking amount")]
+    InvalidAmount,
+}
+
+#[derive(Accounts)]
+pub struct Faucet<'info> {
+    #[account(mut)]
+    pub mint: Account<'info, Mint>,
+    #[account(
+        mut,
+        associated_token::mint = mint,
+        associated_token::authority = user,
+    )]
+    pub user_ata: Account<'info, TokenAccount>,
+    #[account(
+        seeds = [b"mint_authority"],
+        bump
+    )]
+    /// CHECK: This is just a PDA that holds the mint authority
+    pub mint_authority: UncheckedAccount<'info>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub token_program: Program<'info, Token>,
 }

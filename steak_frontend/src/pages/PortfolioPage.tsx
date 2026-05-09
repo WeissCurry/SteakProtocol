@@ -1,128 +1,132 @@
-import { Briefcase, TrendingUp, Gem, Clock, ArrowUpRight, Download } from 'lucide-react';
+import { Briefcase, RefreshCw } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+
+import { useSteakProgram } from '../hooks/useSteakProgram';
+import { useWallet } from '@solana/wallet-adapter-react';
+import * as anchor from '@coral-xyz/anchor';
+import { useBatches } from '../hooks/useBatches';
+
+import NotificationModal from '../components/NotificationModal';
+import { PortfolioStats } from '../components/portfolio/PortfolioStats';
+import { PortfolioInvestmentCard } from '../components/portfolio/PortfolioInvestmentCard';
+import { PortfolioActivityTable } from '../components/portfolio/PortfolioActivityTable';
+import { CertificateModal } from '../components/dashboard/CertificateModal';
+
+interface Activity {
+  id: string;
+  type: string;
+  amount: number;
+  series: string;
+  date: string;
+  duration: number;
+  apy: string;
+  status: string;
+  txSig?: string;
+  certificateId?: string;
+  batchId?: number;
+  seriesName?: string;
+}
 
 const PortfolioPage = () => {
-  const stats = [
-    {
-      label: 'Total Invested',
-      value: '12,500,000',
-      sub: 'IDRX',
-      icon: Gem,
-      color: 'bg-grass-primary',
-    },
-    {
-      label: 'Est. Earnings',
-      value: '768,450',
-      sub: '+6.25% Avg',
-      icon: TrendingUp,
-      color: 'bg-emerald-400',
-    },
-    {
-      label: 'Claimable',
-      value: '124,500',
-      sub: 'IDRX Rewards',
-      icon: ArrowUpRight,
-      color: 'bg-sky-400',
-    },
-  ];
+  const { publicKey } = useWallet();
+  const program = useSteakProgram();
+  const { data: blockchainBatches, refetch } = useBatches();
 
-  const activeStakes = [
-    { id: 'SS001', amount: '5,000,000', apy: '6.15%', daysLeft: 12, status: 'Active' },
-    { id: 'SS002', amount: '7,500,000', apy: '6.40%', daysLeft: 45, status: 'Active' },
-  ];
+  const [activities] = useState<Activity[]>(() => {
+    const saved = localStorage.getItem('steak_activities');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [now] = useState(() => Date.now());
+
+  const [notification, setNotification] = useState<{ isOpen: boolean; title: string; message: string; type: 'error' | 'success' }>({ isOpen: false, title: '', message: '', type: 'success' });
+  const [showNftModal, setShowNftModal] = useState(false);
+  const [selectedStake, setSelectedStake] = useState<Activity | null>(null);
+  const [isWithdrawing, setIsWithdrawing] = useState<string | null>(null);
+
+  const portfolioStats = useMemo(() => {
+    const totalInvested = activities.filter(a => a.type === 'STAKE').reduce((sum, a) => sum + a.amount, 0);
+    const estProfit = activities.filter(a => a.type === 'STAKE').reduce((sum, a) => {
+      const apy = parseFloat(a.apy || '6.25');
+      return sum + (a.amount * (apy / 100) * (a.duration / 365));
+    }, 0);
+    return { totalInvested, estProfit };
+  }, [activities]);
+
+  const activeInvestments = useMemo(() => activities.filter(a => a.type === 'STAKE'), [activities]);
+
+  const handleWithdraw = async (stake: Activity) => {
+    if (!program || !publicKey || !stake.batchId) return;
+    try {
+      setIsWithdrawing(stake.id);
+      const bId = new anchor.BN(stake.batchId);
+      const [batchPda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('batch'), bId.toArrayLike(Buffer, 'le', 8)], program.programId);
+      const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('batch_vault'), bId.toArrayLike(Buffer, 'le', 8)], program.programId);
+      const [userStakePda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('user_stake'), publicKey.toBuffer(), bId.toArrayLike(Buffer, 'le', 8)], program.programId);
+
+      const IDRX_MINT = new anchor.web3.PublicKey('CHyZcyVYWNpXDxHtuLEZyw7xwyPCkj9G8DzLj3gvtsPx');
+      const { getAssociatedTokenAddress } = await import('@solana/spl-token');
+      const userAta = await getAssociatedTokenAddress(IDRX_MINT, publicKey);
+
+      await program.methods.claim().accounts({ batch: batchPda, batchVault: vaultPda, userStake: userStakePda, userTokenAccount: userAta, user: publicKey, tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID }).rpc();
+
+      setNotification({ isOpen: true, title: 'Claim Success!', message: `Investment proceeds from ${stake.series || 'Batch'} successfully claimed to wallet. 💸`, type: 'success' });
+      await refetch();
+    } catch (error) {
+      console.error(error);
+      setNotification({ isOpen: true, title: 'Claim Failed', message: error instanceof Error ? error.message : String(error), type: 'error' });
+    } finally {
+      setIsWithdrawing(null);
+    }
+  };
+
+  const handleViewNFT = (stake: Activity) => {
+    setSelectedStake(stake);
+    setShowNftModal(true);
+  };
+
+  const maturityDate = useMemo(() => {
+    if (!selectedStake) return '';
+    const ts = new Date(selectedStake.date).getTime();
+    return new Date(ts + (selectedStake.duration || 0) * 86400000).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
+  }, [selectedStake]);
 
   return (
     <>
-      <div className="mb-10">
-        <h1 className="text-4xl font-black mb-4 uppercase tracking-tighter">My Portfolio 💼</h1>
-        <p className="text-grass-subtext max-w-2xl font-black uppercase text-sm tracking-tight leading-tight">
-          Track your active stakes, pending rewards, and historical performance. 🐐🌿
-        </p>
+      <div className="flex items-center gap-4 mb-8 pb-4 border-b-2 border-black border-dashed">
+        <div className="w-10 h-10 bg-black text-grass-primary border-2 border-black rounded-xl flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+          <Briefcase size={24} />
+        </div>
+        <div>
+          <h1 className="text-3xl font-black uppercase tracking-tighter italic">Portfolio</h1>
+          <p className="text-[9px] font-black uppercase text-grass-subtext tracking-widest mt-0.5">Active Assets</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-white border-2 border-black p-6 rounded-[24px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden group"
-          >
-            <div
-              className={`absolute top-0 right-0 w-12 h-12 ${stat.color} border-l-2 border-b-2 border-black flex items-center justify-center rounded-bl-2xl`}
-            >
-              <stat.icon size={20} className="text-black" />
-            </div>
-            <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest mb-2">
-              {stat.label}
-            </p>
-            <h3 className="text-2xl font-black text-black italic tracking-tighter">{stat.value}</h3>
-            <p className="text-[10px] font-black text-black/40 uppercase mt-1">{stat.sub}</p>
-          </div>
-        ))}
-      </div>
+      <PortfolioStats {...portfolioStats} />
 
-      <div className="bg-white border-2 border-black rounded-[32px] p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
-        <div className="flex items-center justify-between mb-10 pb-6 border-b-2 border-black border-dashed">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-black border-2 border-black flex items-center justify-center rounded-xl">
-              <Briefcase size={22} className="text-grass-primary" />
-            </div>
-            <h3 className="text-xl font-black uppercase tracking-tighter italic">
-              Your Active Series
-            </h3>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-black text-[10px] font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
-            <Download size={14} />
-            Export Data
-          </button>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-black uppercase tracking-tighter italic">Active</h3>
+          <div className="h-px flex-1 mx-6 bg-black/10" />
         </div>
 
-        <div className="space-y-4">
-          {activeStakes.map((stake) => (
-            <div
-              key={stake.id}
-              className="flex flex-col md:flex-row md:items-center justify-between p-6 border-2 border-black rounded-2xl hover:bg-grass-bg/30 transition-all group"
-            >
-              <div className="flex items-center gap-6 mb-4 md:mb-0">
-                <div className="w-14 h-14 bg-black text-white border-2 border-black rounded-xl flex flex-col items-center justify-center shadow-[3px_3px_0px_0px_rgba(181,255,0,1)]">
-                  <span className="text-[8px] font-black uppercase opacity-60">ID</span>
-                  <span className="text-sm font-black italic">{stake.id}</span>
-                </div>
-                <div>
-                  <h4 className="text-xl font-black uppercase tracking-tight">
-                    Steak Series {stake.id}
-                  </h4>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-[10px] font-black bg-grass-primary border border-black px-2 py-0.5 rounded uppercase">
-                      {stake.apy} APR
-                    </span>
-                    <div className="flex items-center gap-1 text-grass-subtext">
-                      <Clock size={12} />
-                      <span className="text-[10px] font-black uppercase">
-                        {stake.daysLeft} Hari Tersisa
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-10">
-                <div className="text-right">
-                  <p className="text-[10px] font-black uppercase text-grass-subtext mb-1">
-                    Staked Amount
-                  </p>
-                  <p className="text-xl font-black italic">
-                    {stake.amount} <span className="text-xs not-italic">IDRX</span>
-                  </p>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  <button className="px-6 py-2 bg-black text-white text-[10px] font-black uppercase border-2 border-black shadow-[4px_4px_0px_0px_rgba(181,255,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(181,255,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all">
-                    Detail NFT
-                  </button>
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 gap-4">
+          {activeInvestments.map((activity) => (
+            <PortfolioInvestmentCard key={activity.id} activity={activity} onWithdraw={handleWithdraw} isWithdrawing={isWithdrawing === activity.id} onViewNFT={handleViewNFT} />
           ))}
+          {activeInvestments.length === 0 && (
+            <div className="bg-zinc-50 border-2 border-black border-dashed rounded-[24px] py-16 text-center flex flex-col items-center">
+              <RefreshCw size={32} className="text-grass-subtext/20 mb-3" />
+              <p className="font-black uppercase text-grass-subtext text-[10px] tracking-widest mb-4">No active investments.</p>
+              <Link to="/app/earn" className="px-6 py-2 bg-black text-grass-primary border-2 border-black font-black uppercase text-[9px] shadow-[3px_3px_0px_0px_rgba(181,255,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">Start Stake</Link>
+            </div>
+          )}
         </div>
       </div>
+
+      <CertificateModal isOpen={showNftModal} onClose={() => setShowNftModal(false)} stakeInfo={selectedStake ? { ...selectedStake, timestamp: new Date(selectedStake.date).getTime() } : null} maturityDate={maturityDate} certificateId={selectedStake?.certificateId || 'STEAK-CERT-MOCK'} />
+      <NotificationModal isOpen={notification.isOpen} onClose={() => setNotification({ ...notification, isOpen: false })} title={notification.title} message={notification.message} type={notification.type} />
     </>
   );
 };

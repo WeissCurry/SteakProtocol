@@ -20,9 +20,9 @@ describe("steak_contract", () => {
   const admin = (provider.wallet as anchor.Wallet).payer;
   const user = anchor.web3.Keypair.generate();
 
-  let idrxMint: anchor.web3.Pubkey;
-  let adminTokenAccount: anchor.web3.Pubkey;
-  let userTokenAccount: anchor.web3.Pubkey;
+  let idrxMint: anchor.web3.PublicKey;
+  let adminTokenAccount: anchor.web3.PublicKey;
+  let userTokenAccount: anchor.web3.PublicKey;
 
   const batchId = new anchor.BN(1);
   const lockDuration = new anchor.BN(30 * 24 * 60 * 60); // 30 days
@@ -78,16 +78,67 @@ describe("steak_contract", () => {
 
     await program.methods
       .initializeProtocol()
-      .accounts({
+      .accountsPartial({
         globalState,
         admin: admin.publicKey,
         feeDestination: admin.publicKey,
-        systemProgram: anchor.web3.SystemProgram.programId,
       })
       .rpc();
 
     const state = await program.account.globalState.fetch(globalState);
     assert.equal(state.admin.toBase58(), admin.publicKey.toBase58());
+  });
+
+  it("Provides tokens via Faucet PDA", async () => {
+    const faucetAmount = new anchor.BN(1000_000_000); // 1000 IDRX
+
+    const [mintAuthority] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from("mint_authority")],
+      program.programId
+    );
+
+    // Transfer mint authority to PDA first (Mocking what we did in CLI)
+    await anchor.web3.sendAndConfirmTransaction(
+      provider.connection,
+      new anchor.web3.Transaction().add(
+        anchor.web3.SystemProgram.transfer({
+          fromPubkey: admin.publicKey,
+          toPubkey: mintAuthority,
+          lamports: 10000000,
+        })
+      ),
+      [admin]
+    );
+
+    // Note: In local tests, we manually set authority for the mock mint
+    const { setAuthority, AuthorityType } = await import("@solana/spl-token");
+    await setAuthority(
+      provider.connection,
+      admin,
+      idrxMint,
+      admin.publicKey,
+      AuthorityType.MintTokens,
+      mintAuthority
+    );
+
+    const initialBalance = (await getAccount(provider.connection, userTokenAccount)).amount;
+
+    await program.methods
+      .faucet(faucetAmount)
+      .accountsPartial({
+        mint: idrxMint,
+        userAta: userTokenAccount,
+        mintAuthority,
+        user: user.publicKey,
+      })
+      .signers([user])
+      .rpc();
+
+    const finalBalance = (await getAccount(provider.connection, userTokenAccount)).amount;
+    assert.equal(
+      Number(finalBalance) - Number(initialBalance),
+      faucetAmount.toNumber()
+    );
   });
 
   it("Creates a batch", async () => {
@@ -104,16 +155,15 @@ describe("steak_contract", () => {
     const maxCapacity = new anchor.BN(5_000_000_000);
     const apy = new anchor.BN(615); // 6.15%
 
+    const name = "Steak Series SS001";
+
     await program.methods
-      .createBatch(batchId, lockDuration, maxCapacity, apy)
-      .accounts({
+      .createBatch(batchId, lockDuration, maxCapacity, apy, goats, cows, name)
+      .accountsPartial({
         batch,
         batchVault,
         usdcMint: idrxMint,
         admin: admin.publicKey,
-        systemProgram: anchor.web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        rent: anchor.web3.SYSVAR_RENT_PUBKEY,
       })
       .rpc();
 
@@ -151,15 +201,13 @@ describe("steak_contract", () => {
 
     await program.methods
       .stake(batchId, stakeAmount)
-      .accounts({
+      .accountsPartial({
         batch,
         batchVault,
         userStake,
         globalState,
         userTokenAccount,
         user: user.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
       })
       .signers([user])
       .rpc();
@@ -181,7 +229,7 @@ describe("steak_contract", () => {
 
     await program.methods
       .startBatch()
-      .accounts({
+      .accountsPartial({
         globalState,
         batch,
         admin: admin.publicKey,
@@ -198,15 +246,21 @@ describe("steak_contract", () => {
     // Total to claim = 500 + 100 = 600.
     const finalRevenue = new anchor.BN(700_000_000);
 
-    // Admin needs to have the revenue to send back
-    await mintTo(
-      provider.connection,
-      admin,
-      idrxMint,
-      adminTokenAccount,
-      admin,
-      finalRevenue.toNumber()
+    const [mintAuthority] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from("mint_authority")],
+      program.programId
     );
+
+    // Use our own faucet to fund admin for the harvest revenue
+    await program.methods
+      .faucet(finalRevenue)
+      .accountsPartial({
+        mint: idrxMint,
+        userAta: adminTokenAccount,
+        mintAuthority,
+        user: admin.publicKey,
+      })
+      .rpc();
 
     const [globalState] = anchor.web3.PublicKey.findProgramAddressSync(
       [Buffer.from("global_state")],
@@ -225,13 +279,12 @@ describe("steak_contract", () => {
 
     await program.methods
       .harvestBatch(finalRevenue)
-      .accounts({
+      .accountsPartial({
         globalState,
         batch,
         batchVault,
         adminTokenAccount,
         admin: admin.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
       })
       .rpc();
 
@@ -265,13 +318,12 @@ describe("steak_contract", () => {
 
     await program.methods
       .claim()
-      .accounts({
+      .accountsPartial({
         batch,
         batchVault,
         userStake,
         userTokenAccount,
         user: user.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
       })
       .signers([user])
       .rpc();

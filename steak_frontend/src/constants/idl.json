@@ -1,5 +1,5 @@
 {
-  "address": "GY3PgUAPuXte7ZH7VUjixuSn4pKqLDsfREitaqbu6zmA",
+  "address": "3GuFxJRfywTENWeTKSC8jjNNwMNPqv4aGYd8SiY6aDP4",
   "metadata": {
     "name": "steak_contract",
     "version": "0.1.0",
@@ -165,7 +165,7 @@
           }
         },
         {
-          "name": "usdc_mint"
+          "name": "token_mint"
         },
         {
           "name": "admin",
@@ -200,6 +200,168 @@
         },
         {
           "name": "apy",
+          "type": "u64"
+        },
+        {
+          "name": "goats",
+          "type": "u64"
+        },
+        {
+          "name": "cows",
+          "type": "u64"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "faucet",
+      "discriminator": [
+        0,
+        98,
+        59,
+        30,
+        144,
+        142,
+        113,
+        12
+      ],
+      "accounts": [
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "user_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "mint_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  105,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
           "type": "u64"
         }
       ]
@@ -454,11 +616,49 @@
           "writable": true
         },
         {
+          "name": "batch_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  97,
+                  116,
+                  99,
+                  104,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "batch.batch_id",
+                "account": "Batch"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin_token_account",
+          "writable": true
+        },
+        {
           "name": "admin",
+          "writable": true,
           "signer": true,
           "relations": [
             "global_state"
           ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
         }
       ],
       "args": []
@@ -505,6 +705,21 @@
       ]
     }
   ],
+  "events": [
+    {
+      "name": "StakeEvent",
+      "discriminator": [
+        226,
+        134,
+        188,
+        173,
+        19,
+        33,
+        75,
+        175
+      ]
+    }
+  ],
   "errors": [
     {
       "code": 6000,
@@ -545,6 +760,11 @@
       "code": 6007,
       "name": "CapacityReached",
       "msg": "Series capacity has been reached"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidAmount",
+      "msg": "Invalid staking amount"
     }
   ],
   "types": [
@@ -592,6 +812,18 @@
           {
             "name": "apy",
             "type": "u64"
+          },
+          {
+            "name": "goats",
+            "type": "u64"
+          },
+          {
+            "name": "cows",
+            "type": "u64"
+          },
+          {
+            "name": "name",
+            "type": "string"
           }
         ]
       }
@@ -611,6 +843,30 @@
           },
           {
             "name": "total_tvl",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "batch_id",
+            "type": "u64"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
             "type": "u64"
           }
         ]

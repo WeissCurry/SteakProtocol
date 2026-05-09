@@ -38,3 +38,7 @@ pnpm-debug.log*
 # Rust related
 **/*.rs.bk
 target/
+
+# Local Deployment / Scripts
+mint_info.json
+reset_contract.sh

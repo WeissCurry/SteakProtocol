@@ -1,6 +1,46 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Beef, ArrowRight, Shield, TrendingUp, Zap } from 'lucide-react';
+import { ArrowRight, Shield, TrendingUp, Zap } from 'lucide-react';
+
+const GoatRain = () => {
+  const [goats] = useState(() =>
+    Array.from({ length: 20 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      duration: 10 + Math.random() * 15,
+      delay: Math.random() * 10,
+      rotateDir: Math.random() > 0.5 ? 1 : -1,
+    })),
+  );
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {goats.map((goat) => (
+        <motion.img
+          key={goat.id}
+          src="/Kambing.png"
+          className="absolute w-16 h-16 md:w-24 md:h-24 opacity-10"
+          initial={{
+            top: -150,
+            left: goat.left,
+            rotate: 0,
+          }}
+          animate={{
+            top: '120%',
+            rotate: 360 * goat.rotateDir,
+          }}
+          transition={{
+            duration: goat.duration,
+            repeat: Infinity,
+            ease: 'linear',
+            delay: goat.delay,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 const LandingPage = () => {
   const fadeIn = {
@@ -18,15 +58,17 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-grass-bg text-black font-sans selection:bg-grass-primary selection:text-black grid-bg">
+    <div className="min-h-screen bg-grass-bg text-black font-sans selection:bg-grass-primary selection:text-black grid-bg relative overflow-hidden">
+      <GoatRain />
       {/* Navigation */}
       <div className="sticky top-4 z-50 px-4">
         <nav className="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto bg-white/90 backdrop-blur-md border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-3xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-grass-primary border-2 border-black rounded-xl flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-              <Beef className="text-black w-6 h-6" />
-            </div>
-            <span className="text-2xl font-black tracking-tight uppercase">STEAK</span>
+            <img
+              src="/SteakProtocolLogo.png"
+              alt="Steak Protocol Logo"
+              className="h-12 w-auto object-contain"
+            />
           </div>
           <Link
             to="/app"
@@ -38,7 +80,7 @@ const LandingPage = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="px-8 pt-48 pb-48 max-w-7xl mx-auto text-center relative overflow-hidden">
+      <section className="px-8 pt-8 pb-48 max-w-7xl mx-auto text-center relative z-10 overflow-hidden">
         <motion.div
           initial="initial"
           animate="animate"
@@ -55,13 +97,27 @@ const LandingPage = () => {
             </span>
           </motion.div>
 
+          <motion.img
+            src="/SteakProtocolMascot.png"
+            alt="Steak Protocol Mascot"
+            className="w-full max-w-[300px] md:max-w-[500px] h-auto mx-auto mb-12 drop-shadow-[20px_20px_0px_rgba(0,0,0,0.1)]"
+            initial={{ scale: 0, rotate: -20, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            transition={{
+              type: 'spring',
+              stiffness: 260,
+              damping: 20,
+              delay: 0.3,
+            }}
+          />
+
           <motion.h1
             variants={fadeIn}
             className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-8 uppercase text-black"
           >
-            Investasi <br />
+            Future <br />
             <span className="bg-grass-primary border-4 border-black px-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
-              Masa Depan
+              Investment
             </span>
           </motion.h1>
 
@@ -69,8 +125,8 @@ const LandingPage = () => {
             variants={fadeIn}
             className="text-lg text-black max-w-2xl mx-auto mb-12 leading-tight font-black uppercase tracking-tight"
           >
-            Protokol RWA pertama di Solana untuk aset peternakan. Dapatkan imbal hasil stabil dengan
-            aset fisik terverifikasi. 🌿🐄🐐
+            The first RWA protocol on Solana for livestock assets. Get stable yields with
+            verified physical assets. 🌿🐄🐐
           </motion.p>
 
           <motion.div
@@ -81,11 +137,11 @@ const LandingPage = () => {
               to="/app"
               className="group px-10 py-5 bg-grass-primary text-black text-xl font-black border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-2xl hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all uppercase flex items-center gap-4"
             >
-              Mulai Earn
+              Start Earning
               <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
             </Link>
             <button className="px-10 py-5 bg-white text-black text-xl font-black border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-2xl hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all uppercase">
-              Prospektus
+              Prospectus
             </button>
           </motion.div>
         </motion.div>
@@ -128,14 +184,14 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="px-8 py-40 max-w-7xl mx-auto">
+      <section className="px-8 py-40 max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-24">
           <h2 className="text-5xl md:text-7xl font-black mb-6 text-black uppercase tracking-tighter leading-none">
-            Keuntungan <br />
-            <span className="text-grass-primary">Steak Earn</span>
+            Steak Earn <br />
+            <span className="text-grass-primary">Benefits</span>
           </h2>
           <p className="text-black text-lg max-w-2xl mx-auto font-black uppercase tracking-tight">
-            Stabilitas tradisional bertemu dengan infrastruktur Solana yang cepat.
+            Traditional stability meets fast Solana infrastructure.
           </p>
         </div>
 
@@ -143,19 +199,19 @@ const LandingPage = () => {
           {[
             {
               title: 'Fixed Rate Yield',
-              desc: 'Imbal hasil yang pasti dan dibayarkan langsung ke wallet Anda dalam IDRX.',
+              desc: 'Guaranteed yields paid directly to your wallet in IDRX.',
               icon: TrendingUp,
               color: 'bg-emerald-400',
             },
             {
-              title: 'Aset Fisik Nyata',
-              desc: 'Setiap seri staking didukung oleh hewan ternak fisik yang berasuransi.',
+              title: 'Real Physical Assets',
+              desc: 'Every staking series is backed by insured physical livestock.',
               icon: Zap,
               color: 'bg-grass-primary',
             },
             {
-              title: 'Sertifikat NFT',
-              desc: 'Terima bukti kepemilikan digital dalam bentuk NFT yang transparan.',
+              title: 'NFT Certificate',
+              desc: 'Receive digital proof of ownership in the form of transparent NFTs.',
               icon: Shield,
               color: 'bg-blue-400',
             },
@@ -176,23 +232,36 @@ const LandingPage = () => {
               <h4 className="text-3xl font-black mb-6 text-black uppercase tracking-tighter">
                 {feature.title}
               </h4>
-              <p className="text-black font-black uppercase text-sm leading-snug">{feature.desc}</p>
+              <p className="text-black font-black uppercase text-sm leading-snug mb-8">
+                {feature.desc}
+              </p>
+              {feature.title === 'Sertifikat NFT' && (
+                <div className="relative mt-4 group/nft overflow-hidden rounded-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                  <img
+                    src="/Mock-NFT.png"
+                    alt="NFT Example"
+                    className="w-full h-auto grayscale group-hover/nft:grayscale-0 transition-all duration-500 scale-110 group-hover/nft:scale-100"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/nft:opacity-100 transition-opacity">
+                    <span className="bg-white text-black text-[10px] font-black px-3 py-1 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase">
+                      Preview Certificate
+                    </span>
+                  </div>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="px-8 py-32 border-t-4 border-black bg-white">
+      <footer className="px-8 py-32 border-t-4 border-black bg-white relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-black border-2 border-grass-primary flex items-center justify-center rounded-2xl">
-              <Beef className="text-grass-primary w-10 h-10" />
-            </div>
-            <span className="text-4xl font-black tracking-tight uppercase">STEAK</span>
+            <img src="/SteakProtocolLogo.png" alt="Steak Protocol Logo" className="h-14 w-auto" />
           </div>
           <p className="text-black text-lg font-black uppercase tracking-tight max-w-md text-center md:text-left leading-none">
-            Membangun masa depan keuangan agrikultur yang terdesentralisasi. 🐐🌱🐄
+            Building a decentralized future for agricultural finance. 🐐🌱🐄
           </p>
           <div className="flex gap-10">
             <a

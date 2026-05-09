@@ -1,3 +1,6 @@
+import { IdlAccounts } from '@coral-xyz/anchor';
+import { PublicKey } from '@solana/web3.js';
+
 /**
  * Program IDL in camelCase format in order to be used in JS/TS.
  *
@@ -866,3 +869,13 @@ export type SteakContract = {
     }
   ]
 };
+
+export type BatchAccount = IdlAccounts<SteakContract>['batch'];
+export type GlobalStateAccount = IdlAccounts<SteakContract>['globalState'];
+export type UserStakeAccount = IdlAccounts<SteakContract>['userStake'];
+
+export type ProgramAccount<T> = {
+  publicKey: PublicKey;
+  account: T;
+};
+

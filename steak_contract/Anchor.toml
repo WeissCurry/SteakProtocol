@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-steak_contract = "3GuFxJRfywTENWeTKSC8jjNNwMNPqv4aGYd8SiY6aDP4"
+steak_contract = "AWyvmkzcDrtjxzm5CTcMgQPb3RPhfaCKwsBPKmVCXNPV"
 
 [programs.localnet]
 steak_contract = "TTg7AVpTDzQ6fm4gycBHru2rn5iBTxvjDaVRhtjPW13"

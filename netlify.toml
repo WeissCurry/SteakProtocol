@@ -1,0 +1,19 @@
+[build]
+  # The directory where Netlify will run the build command
+  base = "steak_frontend"
+  
+  # The command to build the project
+  command = "pnpm build"
+  
+  # The directory where the build output is located (relative to base)
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_FLAGS = "--no-frozen-lockfile"
+
+[[redirects]]
+  # This redirect rule ensures that all paths are handled by the single-page app (React Router)
+  from = "/*"
+  to = "/index.html"
+  status = 200

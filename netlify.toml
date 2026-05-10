@@ -1,12 +1,9 @@
 [build]
-  # The directory where Netlify will run the build command
-  base = "steak_frontend"
+  # The command to build the project from the root
+  command = "cd steak_frontend && pnpm build"
   
-  # The command to build the project
-  command = "pnpm build"
-  
-  # The directory where the build output is located (relative to base)
-  publish = "dist"
+  # The directory where the build output is located (relative to root)
+  publish = "steak_frontend/dist"
 
 [build.environment]
   NODE_VERSION = "20"

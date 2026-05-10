@@ -8,252 +8,184 @@ import { PublicKey } from '@solana/web3.js';
  * IDL can be found at `target/idl/steak_contract.json`.
  */
 export type SteakContract = {
-  "address": "TTg7AVpTDzQ6fm4gycBHru2rn5iBTxvjDaVRhtjPW13",
-  "metadata": {
-    "name": "steakContract",
-    "version": "0.1.0",
-    "spec": "0.1.0",
-    "description": "Created with Anchor"
-  },
-  "instructions": [
+  address: 'TTg7AVpTDzQ6fm4gycBHru2rn5iBTxvjDaVRhtjPW13';
+  metadata: {
+    name: 'steakContract';
+    version: '0.1.0';
+    spec: '0.1.0';
+    description: 'Created with Anchor';
+  };
+  instructions: [
     {
-      "name": "claim",
-      "discriminator": [
-        62,
-        198,
-        214,
-        193,
-        213,
-        159,
-        108,
-        210
-      ],
-      "accounts": [
+      name: 'claim';
+      discriminator: [62, 198, 214, 193, 213, 159, 108, 210];
+      accounts: [
         {
-          "name": "batch",
-          "writable": true
+          name: 'batch';
+          writable: true;
         },
         {
-          "name": "batchVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'batchVault';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  98,
-                  97,
-                  116,
-                  99,
-                  104,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                kind: 'const';
+                value: [98, 97, 116, 99, 104, 95, 118, 97, 117, 108, 116];
               },
               {
-                "kind": "account",
-                "path": "batch.batch_id",
-                "account": "batch"
-              }
-            ]
-          }
+                kind: 'account';
+                path: 'batch.batch_id';
+                account: 'batch';
+              },
+            ];
+          };
         },
         {
-          "name": "userStake",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'userStake';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  117,
-                  115,
-                  101,
-                  114,
-                  95,
-                  115,
-                  116,
-                  97,
-                  107,
-                  101
-                ]
+                kind: 'const';
+                value: [117, 115, 101, 114, 95, 115, 116, 97, 107, 101];
               },
               {
-                "kind": "account",
-                "path": "user"
+                kind: 'account';
+                path: 'user';
               },
               {
-                "kind": "account",
-                "path": "batch.batch_id",
-                "account": "batch"
-              }
-            ]
-          }
+                kind: 'account';
+                path: 'batch.batch_id';
+                account: 'batch';
+              },
+            ];
+          };
         },
         {
-          "name": "userTokenAccount",
-          "writable": true
+          name: 'userTokenAccount';
+          writable: true;
         },
         {
-          "name": "user",
-          "writable": true,
-          "signer": true
+          name: 'user';
+          writable: true;
+          signer: true;
         },
         {
-          "name": "tokenProgram",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        }
-      ],
-      "args": []
+          name: 'tokenProgram';
+          address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+        },
+      ];
+      args: [];
     },
     {
-      "name": "createBatch",
-      "discriminator": [
-        159,
-        198,
-        248,
-        43,
-        248,
-        31,
-        235,
-        86
-      ],
-      "accounts": [
+      name: 'createBatch';
+      discriminator: [159, 198, 248, 43, 248, 31, 235, 86];
+      accounts: [
         {
-          "name": "batch",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'batch';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  98,
-                  97,
-                  116,
-                  99,
-                  104
-                ]
+                kind: 'const';
+                value: [98, 97, 116, 99, 104];
               },
               {
-                "kind": "arg",
-                "path": "batchId"
-              }
-            ]
-          }
+                kind: 'arg';
+                path: 'batchId';
+              },
+            ];
+          };
         },
         {
-          "name": "batchVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'batchVault';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  98,
-                  97,
-                  116,
-                  99,
-                  104,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                kind: 'const';
+                value: [98, 97, 116, 99, 104, 95, 118, 97, 117, 108, 116];
               },
               {
-                "kind": "arg",
-                "path": "batchId"
-              }
-            ]
-          }
+                kind: 'arg';
+                path: 'batchId';
+              },
+            ];
+          };
         },
         {
-          "name": "usdcMint"
+          name: 'usdcMint';
         },
         {
-          "name": "admin",
-          "writable": true,
-          "signer": true
+          name: 'admin';
+          writable: true;
+          signer: true;
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          name: 'systemProgram';
+          address: '11111111111111111111111111111111';
         },
         {
-          "name": "tokenProgram",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+          name: 'tokenProgram';
+          address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
         },
         {
-          "name": "rent",
-          "address": "SysvarRent111111111111111111111111111111111"
-        }
-      ],
-      "args": [
+          name: 'rent';
+          address: 'SysvarRent111111111111111111111111111111111';
+        },
+      ];
+      args: [
         {
-          "name": "batchId",
-          "type": "u64"
+          name: 'batchId';
+          type: 'u64';
         },
         {
-          "name": "lockDuration",
-          "type": "u64"
+          name: 'lockDuration';
+          type: 'u64';
         },
         {
-          "name": "maxCapacity",
-          "type": "u64"
+          name: 'maxCapacity';
+          type: 'u64';
         },
         {
-          "name": "apy",
-          "type": "u64"
+          name: 'apy';
+          type: 'u64';
         },
         {
-          "name": "goats",
-          "type": "u64"
+          name: 'goats';
+          type: 'u64';
         },
         {
-          "name": "cows",
-          "type": "u64"
+          name: 'cows';
+          type: 'u64';
         },
         {
-          "name": "name",
-          "type": "string"
-        }
-      ]
+          name: 'name';
+          type: 'string';
+        },
+      ];
     },
     {
-      "name": "faucet",
-      "discriminator": [
-        0,
-        98,
-        59,
-        30,
-        144,
-        142,
-        113,
-        12
-      ],
-      "accounts": [
+      name: 'faucet';
+      discriminator: [0, 98, 59, 30, 144, 142, 113, 12];
+      accounts: [
         {
-          "name": "mint",
-          "writable": true
+          name: 'mint';
+          writable: true;
         },
         {
-          "name": "userAta",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'userAta';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "account",
-                "path": "user"
+                kind: 'account';
+                path: 'user';
               },
               {
-                "kind": "const",
-                "value": [
+                kind: 'const';
+                value: [
                   6,
                   221,
                   246,
@@ -285,17 +217,17 @@ export type SteakContract = {
                   126,
                   255,
                   0,
-                  169
-                ]
+                  169,
+                ];
               },
               {
-                "kind": "account",
-                "path": "mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
+                kind: 'account';
+                path: 'mint';
+              },
+            ];
+            program: {
+              kind: 'const';
+              value: [
                 140,
                 151,
                 37,
@@ -327,547 +259,414 @@ export type SteakContract = {
                 219,
                 233,
                 248,
-                89
-              ]
-            }
-          }
+                89,
+              ];
+            };
+          };
         },
         {
-          "name": "mintAuthority",
-          "pda": {
-            "seeds": [
+          name: 'mintAuthority';
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  109,
-                  105,
-                  110,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  111,
-                  114,
-                  105,
-                  116,
-                  121
-                ]
-              }
-            ]
-          }
+                kind: 'const';
+                value: [109, 105, 110, 116, 95, 97, 117, 116, 104, 111, 114, 105, 116, 121];
+              },
+            ];
+          };
         },
         {
-          "name": "user",
-          "writable": true,
-          "signer": true
+          name: 'user';
+          writable: true;
+          signer: true;
         },
         {
-          "name": "tokenProgram",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        }
-      ],
-      "args": [
+          name: 'tokenProgram';
+          address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+        },
+      ];
+      args: [
         {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
+          name: 'amount';
+          type: 'u64';
+        },
+      ];
     },
     {
-      "name": "harvestBatch",
-      "discriminator": [
-        129,
-        22,
-        248,
-        16,
-        210,
-        170,
-        106,
-        219
-      ],
-      "accounts": [
+      name: 'harvestBatch';
+      discriminator: [129, 22, 248, 16, 210, 170, 106, 219];
+      accounts: [
         {
-          "name": "globalState",
-          "writable": true
+          name: 'globalState';
+          writable: true;
         },
         {
-          "name": "batch",
-          "writable": true
+          name: 'batch';
+          writable: true;
         },
         {
-          "name": "batchVault",
-          "writable": true
+          name: 'batchVault';
+          writable: true;
         },
         {
-          "name": "adminTokenAccount",
-          "writable": true
+          name: 'adminTokenAccount';
+          writable: true;
         },
         {
-          "name": "admin",
-          "signer": true,
-          "relations": [
-            "globalState"
-          ]
+          name: 'admin';
+          signer: true;
+          relations: ['globalState'];
         },
         {
-          "name": "tokenProgram",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        }
-      ],
-      "args": [
+          name: 'tokenProgram';
+          address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+        },
+      ];
+      args: [
         {
-          "name": "finalRevenue",
-          "type": "u64"
-        }
-      ]
+          name: 'finalRevenue';
+          type: 'u64';
+        },
+      ];
     },
     {
-      "name": "initializeProtocol",
-      "discriminator": [
-        188,
-        233,
-        252,
-        106,
-        134,
-        146,
-        202,
-        91
-      ],
-      "accounts": [
+      name: 'initializeProtocol';
+      discriminator: [188, 233, 252, 106, 134, 146, 202, 91];
+      accounts: [
         {
-          "name": "globalState",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'globalState';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  103,
-                  108,
-                  111,
-                  98,
-                  97,
-                  108,
-                  95,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
+                kind: 'const';
+                value: [103, 108, 111, 98, 97, 108, 95, 115, 116, 97, 116, 101];
+              },
+            ];
+          };
         },
         {
-          "name": "admin",
-          "writable": true,
-          "signer": true
+          name: 'admin';
+          writable: true;
+          signer: true;
         },
         {
-          "name": "feeDestination"
+          name: 'feeDestination';
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
+          name: 'systemProgram';
+          address: '11111111111111111111111111111111';
+        },
+      ];
+      args: [];
     },
     {
-      "name": "stake",
-      "discriminator": [
-        206,
-        176,
-        202,
-        18,
-        200,
-        209,
-        179,
-        108
-      ],
-      "accounts": [
+      name: 'stake';
+      discriminator: [206, 176, 202, 18, 200, 209, 179, 108];
+      accounts: [
         {
-          "name": "batch",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'batch';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  98,
-                  97,
-                  116,
-                  99,
-                  104
-                ]
+                kind: 'const';
+                value: [98, 97, 116, 99, 104];
               },
               {
-                "kind": "arg",
-                "path": "batchId"
-              }
-            ]
-          }
+                kind: 'arg';
+                path: 'batchId';
+              },
+            ];
+          };
         },
         {
-          "name": "batchVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'batchVault';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  98,
-                  97,
-                  116,
-                  99,
-                  104,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                kind: 'const';
+                value: [98, 97, 116, 99, 104, 95, 118, 97, 117, 108, 116];
               },
               {
-                "kind": "arg",
-                "path": "batchId"
-              }
-            ]
-          }
+                kind: 'arg';
+                path: 'batchId';
+              },
+            ];
+          };
         },
         {
-          "name": "userStake",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: 'userStake';
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  117,
-                  115,
-                  101,
-                  114,
-                  95,
-                  115,
-                  116,
-                  97,
-                  107,
-                  101
-                ]
+                kind: 'const';
+                value: [117, 115, 101, 114, 95, 115, 116, 97, 107, 101];
               },
               {
-                "kind": "account",
-                "path": "user"
+                kind: 'account';
+                path: 'user';
               },
               {
-                "kind": "arg",
-                "path": "batchId"
-              }
-            ]
-          }
+                kind: 'arg';
+                path: 'batchId';
+              },
+            ];
+          };
         },
         {
-          "name": "globalState",
-          "writable": true
+          name: 'globalState';
+          writable: true;
         },
         {
-          "name": "userTokenAccount",
-          "writable": true
+          name: 'userTokenAccount';
+          writable: true;
         },
         {
-          "name": "user",
-          "writable": true,
-          "signer": true
+          name: 'user';
+          writable: true;
+          signer: true;
         },
         {
-          "name": "tokenProgram",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+          name: 'tokenProgram';
+          address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
+          name: 'systemProgram';
+          address: '11111111111111111111111111111111';
+        },
+      ];
+      args: [
         {
-          "name": "batchId",
-          "type": "u64"
+          name: 'batchId';
+          type: 'u64';
         },
         {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
+          name: 'amount';
+          type: 'u64';
+        },
+      ];
     },
     {
-      "name": "startBatch",
-      "discriminator": [
-        147,
-        69,
-        236,
-        227,
-        64,
-        168,
-        57,
-        68
-      ],
-      "accounts": [
+      name: 'startBatch';
+      discriminator: [147, 69, 236, 227, 64, 168, 57, 68];
+      accounts: [
         {
-          "name": "globalState",
-          "writable": true
+          name: 'globalState';
+          writable: true;
         },
         {
-          "name": "batch",
-          "writable": true
+          name: 'batch';
+          writable: true;
         },
         {
-          "name": "admin",
-          "signer": true,
-          "relations": [
-            "globalState"
-          ]
-        }
-      ],
-      "args": []
-    }
-  ],
-  "accounts": [
+          name: 'admin';
+          signer: true;
+          relations: ['globalState'];
+        },
+      ];
+      args: [];
+    },
+  ];
+  accounts: [
     {
-      "name": "batch",
-      "discriminator": [
-        156,
-        194,
-        70,
-        44,
-        22,
-        88,
-        137,
-        44
-      ]
+      name: 'batch';
+      discriminator: [156, 194, 70, 44, 22, 88, 137, 44];
     },
     {
-      "name": "globalState",
-      "discriminator": [
-        163,
-        46,
-        74,
-        168,
-        216,
-        123,
-        133,
-        98
-      ]
+      name: 'globalState';
+      discriminator: [163, 46, 74, 168, 216, 123, 133, 98];
     },
     {
-      "name": "userStake",
-      "discriminator": [
-        102,
-        53,
-        163,
-        107,
-        9,
-        138,
-        87,
-        153
-      ]
-    }
-  ],
-  "events": [
+      name: 'userStake';
+      discriminator: [102, 53, 163, 107, 9, 138, 87, 153];
+    },
+  ];
+  events: [
     {
-      "name": "stakeEvent",
-      "discriminator": [
-        226,
-        134,
-        188,
-        173,
-        19,
-        33,
-        75,
-        175
-      ]
-    }
-  ],
-  "errors": [
+      name: 'stakeEvent';
+      discriminator: [226, 134, 188, 173, 19, 33, 75, 175];
+    },
+  ];
+  errors: [
     {
-      "code": 6000,
-      "name": "unauthorized",
-      "msg": "Unauthorized access"
+      code: 6000;
+      name: 'unauthorized';
+      msg: 'Unauthorized access';
     },
     {
-      "code": 6001,
-      "name": "batchAlreadyStarted",
-      "msg": "Batch has already started"
+      code: 6001;
+      name: 'batchAlreadyStarted';
+      msg: 'Batch has already started';
     },
     {
-      "code": 6002,
-      "name": "batchAlreadyHarvested",
-      "msg": "Batch has already been harvested"
+      code: 6002;
+      name: 'batchAlreadyHarvested';
+      msg: 'Batch has already been harvested';
     },
     {
-      "code": 6003,
-      "name": "batchNotStarted",
-      "msg": "Batch has not started yet"
+      code: 6003;
+      name: 'batchNotStarted';
+      msg: 'Batch has not started yet';
     },
     {
-      "code": 6004,
-      "name": "batchNotHarvested",
-      "msg": "Batch has not been harvested yet"
+      code: 6004;
+      name: 'batchNotHarvested';
+      msg: 'Batch has not been harvested yet';
     },
     {
-      "code": 6005,
-      "name": "alreadyClaimed",
-      "msg": "Yield has already been claimed"
+      code: 6005;
+      name: 'alreadyClaimed';
+      msg: 'Yield has already been claimed';
     },
     {
-      "code": 6006,
-      "name": "mathOverflow",
-      "msg": "Math overflow or division by zero"
+      code: 6006;
+      name: 'mathOverflow';
+      msg: 'Math overflow or division by zero';
     },
     {
-      "code": 6007,
-      "name": "capacityReached",
-      "msg": "Series capacity has been reached"
+      code: 6007;
+      name: 'capacityReached';
+      msg: 'Series capacity has been reached';
     },
     {
-      "code": 6008,
-      "name": "invalidAmount",
-      "msg": "Invalid staking amount"
-    }
-  ],
-  "types": [
+      code: 6008;
+      name: 'invalidAmount';
+      msg: 'Invalid staking amount';
+    },
+  ];
+  types: [
     {
-      "name": "batch",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'batch';
+      type: {
+        kind: 'struct';
+        fields: [
           {
-            "name": "batchId",
-            "type": "u64"
+            name: 'batchId';
+            type: 'u64';
           },
           {
-            "name": "lockDuration",
-            "type": "u64"
+            name: 'lockDuration';
+            type: 'u64';
           },
           {
-            "name": "startTime",
-            "type": "u64"
+            name: 'startTime';
+            type: 'u64';
           },
           {
-            "name": "isActive",
-            "type": "bool"
+            name: 'isActive';
+            type: 'bool';
           },
           {
-            "name": "totalStaked",
-            "type": "u64"
+            name: 'totalStaked';
+            type: 'u64';
           },
           {
-            "name": "finalRevenue",
-            "type": "u64"
+            name: 'finalRevenue';
+            type: 'u64';
           },
           {
-            "name": "isHarvested",
-            "type": "bool"
+            name: 'isHarvested';
+            type: 'bool';
           },
           {
-            "name": "bump",
-            "type": "u8"
+            name: 'bump';
+            type: 'u8';
           },
           {
-            "name": "maxCapacity",
-            "type": "u64"
+            name: 'maxCapacity';
+            type: 'u64';
           },
           {
-            "name": "apy",
-            "type": "u64"
+            name: 'apy';
+            type: 'u64';
           },
           {
-            "name": "goats",
-            "type": "u64"
+            name: 'goats';
+            type: 'u64';
           },
           {
-            "name": "cows",
-            "type": "u64"
+            name: 'cows';
+            type: 'u64';
           },
           {
-            "name": "name",
-            "type": "string"
-          }
-        ]
-      }
+            name: 'name';
+            type: 'string';
+          },
+        ];
+      };
     },
     {
-      "name": "globalState",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'globalState';
+      type: {
+        kind: 'struct';
+        fields: [
           {
-            "name": "admin",
-            "type": "pubkey"
+            name: 'admin';
+            type: 'pubkey';
           },
           {
-            "name": "feeDestination",
-            "type": "pubkey"
+            name: 'feeDestination';
+            type: 'pubkey';
           },
           {
-            "name": "totalTvl",
-            "type": "u64"
-          }
-        ]
-      }
+            name: 'totalTvl';
+            type: 'u64';
+          },
+        ];
+      };
     },
     {
-      "name": "stakeEvent",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'stakeEvent';
+      type: {
+        kind: 'struct';
+        fields: [
           {
-            "name": "user",
-            "type": "pubkey"
+            name: 'user';
+            type: 'pubkey';
           },
           {
-            "name": "batchId",
-            "type": "u64"
+            name: 'batchId';
+            type: 'u64';
           },
           {
-            "name": "amount",
-            "type": "u64"
+            name: 'amount';
+            type: 'u64';
           },
           {
-            "name": "timestamp",
-            "type": "u64"
-          }
-        ]
-      }
+            name: 'timestamp';
+            type: 'u64';
+          },
+        ];
+      };
     },
     {
-      "name": "userStake",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'userStake';
+      type: {
+        kind: 'struct';
+        fields: [
           {
-            "name": "userPubkey",
-            "type": "pubkey"
+            name: 'userPubkey';
+            type: 'pubkey';
           },
           {
-            "name": "batchId",
-            "type": "u64"
+            name: 'batchId';
+            type: 'u64';
           },
           {
-            "name": "amountStaked",
-            "type": "u64"
+            name: 'amountStaked';
+            type: 'u64';
           },
           {
-            "name": "hasClaimed",
-            "type": "bool"
-          }
-        ]
-      }
-    }
-  ]
+            name: 'hasClaimed';
+            type: 'bool';
+          },
+        ];
+      };
+    },
+  ];
 };
 
 export type BatchAccount = IdlAccounts<SteakContract>['batch'];
@@ -879,3 +678,34 @@ export type ProgramAccount<T> = {
   account: T;
 };
 
+export interface MappedBatch {
+  id: string;
+  batchId: number;
+  totalStaked: number;
+  maxCapacity: number;
+  lockDuration: number;
+  apy: string;
+  isActive: boolean;
+  isHarvested: boolean;
+  goats: number;
+  cows: number;
+  name: string;
+  estimatedProfit?: number;
+  startTime?: number | null;
+  publicKey: PublicKey;
+}
+
+export interface Activity {
+  id: string;
+  type: string;
+  amount: number;
+  series?: string;
+  seriesName?: string;
+  batchId?: number;
+  date: string;
+  duration?: number;
+  apy?: string;
+  status: string;
+  txSig?: string;
+  certificateId?: string;
+}

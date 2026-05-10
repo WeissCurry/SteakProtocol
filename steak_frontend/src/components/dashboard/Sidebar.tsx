@@ -1,11 +1,5 @@
 import { NavLink, Link } from 'react-router-dom';
-import {
-  TrendingUp,
-  Briefcase,
-  BarChart3,
-  ShieldCheck,
-  LogOut,
-} from 'lucide-react';
+import { TrendingUp, Briefcase, BarChart3, ShieldCheck, LogOut } from 'lucide-react';
 import { useSteakProgram } from '../../hooks/useSteakProgram';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useState } from 'react';
@@ -89,17 +83,14 @@ export const Sidebar = () => {
       console.error(error);
       const err = error as { message?: string; logs?: string[] };
       let errorMsg =
-        error instanceof Error
-          ? error.message
-          : 'Check if you are the Mint Authority.';
+        error instanceof Error ? error.message : 'Check if you are the Mint Authority.';
 
       if (
         err?.logs?.some(
           (log: string) => log.includes('0x4') || log.includes('owner does not match'),
         )
       ) {
-        errorMsg =
-          'NOT MINT AUTHORITY. Only the creator can mint. 🛡️';
+        errorMsg = 'NOT MINT AUTHORITY. Only the creator can mint. 🛡️';
       }
 
       setNotification({

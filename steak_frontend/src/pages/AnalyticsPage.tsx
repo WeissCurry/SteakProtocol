@@ -1,18 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { BarChart3, TrendingUp, Users, ShieldCheck, Clock } from 'lucide-react';
 import { PortfolioActivityTable } from '../components/portfolio/PortfolioActivityTable';
 
-interface Activity {
-  id: string;
-  type: string;
-  amount: number;
-  series: string;
-  date: string;
-  status: string;
-  txSig?: string;
-  seriesName?: string;
-  batchId?: number;
-}
+import { Activity } from '../types/steak';
 
 const AnalyticsPage = () => {
   const [activities, setActivities] = useState<Activity[]>(() => {
@@ -46,12 +36,21 @@ const AnalyticsPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         {metrics.map((metric) => (
-          <div key={metric.label} className="bg-white border-2 border-black p-6 rounded-[24px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all">
-            <div className={`w-12 h-12 rounded-xl bg-grass-bg border-2 border-black flex items-center justify-center mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`}>
+          <div
+            key={metric.label}
+            className="bg-white border-2 border-black p-6 rounded-[24px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all"
+          >
+            <div
+              className={`w-12 h-12 rounded-xl bg-grass-bg border-2 border-black flex items-center justify-center mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`}
+            >
               <metric.icon size={24} className="text-black" />
             </div>
-            <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest mb-1">{metric.label}</p>
-            <h3 className="text-2xl font-black text-black uppercase tracking-tighter italic">{metric.value}</h3>
+            <p className="text-grass-subtext text-[10px] font-black uppercase tracking-widest mb-1">
+              {metric.label}
+            </p>
+            <h3 className="text-2xl font-black text-black uppercase tracking-tighter italic">
+              {metric.value}
+            </h3>
           </div>
         ))}
       </div>
@@ -60,7 +59,10 @@ const AnalyticsPage = () => {
         <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-2 italic">
           <Clock className="text-black" size={18} /> History
         </h3>
-        <button onClick={handleClearHistory} className="px-4 py-1.5 bg-red-500 text-white text-[9px] font-black uppercase rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:shadow-none active:translate-x-[1px] active:translate-y-[1px] transition-all">
+        <button
+          onClick={handleClearHistory}
+          className="px-4 py-1.5 bg-red-500 text-white text-[9px] font-black uppercase rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:shadow-none active:translate-x-[1px] active:translate-y-[1px] transition-all"
+        >
           Reset
         </button>
       </div>

@@ -1,9 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import {
-  Calendar,
-  RefreshCw,
-  TrendingUp,
-} from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
+import { MappedBatch } from '../../types/steak';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -31,15 +28,16 @@ ChartJS.register(
   Filler,
 );
 
-export const StatsRow = ({ batches = [] }: { batches?: any[] }) => {
+export const StatsRow = ({ batches = [] }: { batches?: MappedBatch[] }) => {
   const stats = useMemo(() => {
     const totalStaked = batches.reduce((acc, b) => acc + (b.totalStaked || 0), 0);
-    const activeSeries = batches.filter(b => b.isActive).length;
-    const upcomingSeries = batches.filter(b => !b.isActive && !b.isHarvested).length;
-    
-    const avgApy = batches.length > 0 
-      ? (batches.reduce((acc, b) => acc + parseFloat(b.apy), 0) / batches.length).toFixed(2)
-      : '0.00';
+    const activeSeries = batches.filter((b) => b.isActive).length;
+    const upcomingSeries = batches.filter((b) => !b.isActive && !b.isHarvested).length;
+
+    const avgApy =
+      batches.length > 0
+        ? (batches.reduce((acc, b) => acc + parseFloat(b.apy), 0) / batches.length).toFixed(2)
+        : '0.00';
 
     return [
       {
@@ -48,17 +46,17 @@ export const StatsRow = ({ batches = [] }: { batches?: any[] }) => {
         change: `Across ${batches.length} batches`,
         color: 'text-emerald-500',
       },
-      { 
-        label: 'Active Series', 
-        value: activeSeries.toString(), 
-        change: `${upcomingSeries} upcoming`, 
-        color: 'text-amber-500' 
+      {
+        label: 'Active Series',
+        value: activeSeries.toString(),
+        change: `${upcomingSeries} upcoming`,
+        color: 'text-amber-500',
       },
-      { 
-        label: 'Fixed Rate (Avg)', 
-        value: `${avgApy}%`, 
-        change: 'P.A', 
-        color: 'text-emerald-500' 
+      {
+        label: 'Fixed Rate (Avg)',
+        value: `${avgApy}%`,
+        change: 'P.A',
+        color: 'text-emerald-500',
       },
     ];
   }, [batches]);
@@ -90,20 +88,18 @@ export const StatsRow = ({ batches = [] }: { batches?: any[] }) => {
   );
 };
 
-export const PerformanceCard = ({ batches = [] }: { batches?: any[] }) => {
+export const PerformanceCard = ({ batches = [] }: { batches?: MappedBatch[] }) => {
   const chartData = useMemo(() => {
     // Take last 6 batches and sort by ID ascending for the chart timeline
-    const history = [...batches]
-      .sort((a, b) => (a.batchId || 0) - (b.batchId || 0))
-      .slice(-6);
+    const history = [...batches].sort((a, b) => (a.batchId || 0) - (b.batchId || 0)).slice(-6);
 
-    const labels = history.length > 0 
-      ? history.map(b => b.name || `SS${String(b.batchId).padStart(3, '0')}`)
-      : ['S0', 'S1', 'S2', 'S3', 'S4', 'S5'];
-    
-    const data = history.length > 0
-      ? history.map(b => parseFloat(b.apy))
-      : [4.5, 5.2, 4.8, 6.1, 5.8, 6.4];
+    const labels =
+      history.length > 0
+        ? history.map((b) => b.name || `SS${String(b.batchId).padStart(3, '0')}`)
+        : ['S0', 'S1', 'S2', 'S3', 'S4', 'S5'];
+
+    const data =
+      history.length > 0 ? history.map((b) => parseFloat(b.apy)) : [4.5, 5.2, 4.8, 6.1, 5.8, 6.4];
 
     return {
       labels,
@@ -141,30 +137,28 @@ export const PerformanceCard = ({ batches = [] }: { batches?: any[] }) => {
       },
     },
     scales: {
-      x: { 
-        display: true, 
+      x: {
+        display: true,
         grid: { display: false },
-        ticks: { 
-          font: { weight: 'bold', size: 8 },
-          color: '#000000'
-        }
-      },
-      y: { 
-        display: true, 
-        grid: { display: true, color: 'rgba(0,0,0,0.05)' },
-        ticks: { 
+        ticks: {
           font: { weight: 'bold', size: 8 },
           color: '#000000',
-          callback: (val) => `${val}%`
-        }
+        },
+      },
+      y: {
+        display: true,
+        grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+        ticks: {
+          font: { weight: 'bold', size: 8 },
+          color: '#000000',
+          callback: (val) => `${val}%`,
+        },
       },
     },
   };
 
   const latestBatches = useMemo(() => {
-    return [...batches]
-      .sort((a, b) => (b.batchId || 0) - (a.batchId || 0))
-      .slice(0, 2);
+    return [...batches].sort((a, b) => (b.batchId || 0) - (a.batchId || 0)).slice(0, 2);
   }, [batches]);
 
   return (
@@ -183,23 +177,26 @@ export const PerformanceCard = ({ batches = [] }: { batches?: any[] }) => {
             Yield Performance
           </h2>
           <p className="text-grass-subtext font-black text-[11px] mb-8 leading-relaxed max-w-xl uppercase tracking-widest">
-            Yields are calculated daily based on the valuation growth of livestock assets 
-            in Indonesia. Secure, Ethical, & Transparent. 🐐🌿
+            Yields are calculated daily based on the valuation growth of livestock assets in
+            Indonesia. Secure, Ethical, & Transparent. 🐐🌿
           </p>
           <div className="flex flex-wrap gap-6">
             {latestBatches.length > 0 ? (
               latestBatches.map((batch, idx) => (
-                <div 
-                  key={batch.batchId} 
+                <div
+                  key={batch.batchId}
                   className={`border-2 border-black p-4 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] min-w-[160px] ${
                     idx === 0 ? 'bg-grass-primary' : 'bg-white'
                   }`}
                 >
-                  <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${idx === 0 ? 'text-black' : 'text-grass-subtext'}`}>
+                  <p
+                    className={`text-[10px] font-black uppercase tracking-widest mb-1 ${idx === 0 ? 'text-black' : 'text-grass-subtext'}`}
+                  >
                     {batch.name || `Series SS${String(batch.batchId).padStart(3, '0')}`}
                   </p>
                   <p className="text-2xl font-black text-black italic">
-                    {batch.apy} <span className="text-[10px] not-italic opacity-60 font-black">P.A</span>
+                    {batch.apy}{' '}
+                    <span className="text-[10px] not-italic opacity-60 font-black">P.A</span>
                   </p>
                 </div>
               ))

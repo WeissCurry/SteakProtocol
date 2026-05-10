@@ -1,12 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import {
-  ChevronDown,
-  Globe,
-  LogOut,
-  RefreshCw,
-  Wallet as WalletIcon,
-} from 'lucide-react';
+import { ChevronDown, Globe, LogOut, RefreshCw, Wallet as WalletIcon } from 'lucide-react';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useNetwork } from '../../contexts/NetworkContext';
 import * as anchor from '@coral-xyz/anchor';
@@ -192,7 +186,11 @@ export const Header = () => {
                 className="flex items-center gap-2 px-3 h-9 bg-white border-2 border-black rounded-lg hover:translate-x-[-1px] hover:translate-y-[-1px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all group"
               >
                 {wallet?.adapter.icon && (
-                  <img src={wallet.adapter.icon} alt={wallet.adapter.name} className="w-3.5 h-3.5" />
+                  <img
+                    src={wallet.adapter.icon}
+                    alt={wallet.adapter.name}
+                    className="w-3.5 h-3.5"
+                  />
                 )}
                 <span className="text-[9px] font-black text-black uppercase tracking-wider">
                   {shortAddress}
@@ -210,7 +208,9 @@ export const Header = () => {
                   <p className="text-[8px] uppercase tracking-widest text-grass-subtext font-black">
                     Wallet
                   </p>
-                  <p className="text-[10px] font-black text-black truncate">{publicKey.toBase58()}</p>
+                  <p className="text-[10px] font-black text-black truncate">
+                    {publicKey.toBase58()}
+                  </p>
                 </div>
                 <button
                   onClick={() => {

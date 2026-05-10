@@ -1,8 +1,8 @@
-import React from 'react';
 import { ExternalLink, CheckCircle2 } from 'lucide-react';
+import { Activity } from '../../types/steak';
 
 interface ActivityTableProps {
-  activities: any[];
+  activities: Activity[];
 }
 
 export const PortfolioActivityTable: React.FC<ActivityTableProps> = ({ activities }) => {
@@ -52,7 +52,7 @@ export const PortfolioActivityTable: React.FC<ActivityTableProps> = ({ activitie
                 </td>
                 <td className="px-8 py-6">
                   <span className="text-sm font-black text-black">
-                    {activity.amount.toLocaleString('id-ID')} IDRX
+                    {activity.amount.toLocaleString('en-US')} IDRX
                   </span>
                 </td>
                 <td className="px-8 py-6 text-right">
@@ -78,7 +78,7 @@ export const PortfolioActivityTable: React.FC<ActivityTableProps> = ({ activitie
               <tr>
                 <td colSpan={4} className="px-8 py-20 text-center">
                   <p className="text-grass-subtext font-black uppercase text-xs tracking-widest">
-                    Belum ada aktivitas transaksi. 🚜
+                    No transaction activity yet. 🚜
                   </p>
                 </td>
               </tr>

@@ -125,8 +125,8 @@ const LandingPage = () => {
             variants={fadeIn}
             className="text-lg text-black max-w-2xl mx-auto mb-12 leading-tight font-black uppercase tracking-tight"
           >
-            The first RWA protocol on Solana for livestock assets. Get stable yields with
-            verified physical assets. 🌿🐄🐐
+            The first RWA protocol on Solana for livestock assets. Get stable yields with verified
+            physical assets. 🌿🐄🐐
           </motion.p>
 
           <motion.div

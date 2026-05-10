@@ -1,11 +1,22 @@
-import React from 'react';
 import { Calculator, X, ChevronRight, Calendar, RefreshCw } from 'lucide-react';
+
+export interface SeriesFormData {
+  name: string;
+  duration: number;
+  quota: number;
+  goats: number;
+  cows: number;
+  profit: number;
+  openStart: string;
+  openEnd: string;
+  stakingStart: string;
+}
 
 interface CreateSeriesModalProps {
   isOpen: boolean;
   onClose: () => void;
-  formData: any;
-  setFormData: (data: any) => void;
+  formData: SeriesFormData;
+  setFormData: React.Dispatch<React.SetStateAction<SeriesFormData>>;
   calculatedApy: string;
   stakingEnd: string;
   isLoading: boolean;

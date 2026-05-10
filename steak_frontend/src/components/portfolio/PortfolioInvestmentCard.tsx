@@ -1,11 +1,12 @@
 import React from 'react';
 import { TrendingUp, Calendar, RefreshCw } from 'lucide-react';
+import { Activity } from '../../types/steak';
 
 interface InvestmentCardProps {
-  activity: any;
-  onWithdraw: (activity: any) => void;
+  activity: Activity;
+  onWithdraw: (activity: Activity) => void | Promise<void>;
   isWithdrawing: boolean;
-  onViewNFT: (activity: any) => void;
+  onViewNFT: (activity: Activity) => void | Promise<void>;
 }
 
 export const PortfolioInvestmentCard: React.FC<InvestmentCardProps> = ({
@@ -38,10 +39,10 @@ export const PortfolioInvestmentCard: React.FC<InvestmentCardProps> = ({
       <div className="flex flex-col lg:flex-row items-center gap-10">
         <div className="text-center lg:text-right">
           <p className="text-[10px] font-black uppercase text-grass-subtext mb-1 tracking-widest">
-            Investasi Utama
+            Principal Investment
           </p>
           <p className="text-2xl font-black">
-            {activity.amount.toLocaleString('id-ID')}{' '}
+            {activity.amount.toLocaleString('en-US')}{' '}
             <span className="text-xs text-grass-subtext">IDRX</span>
           </p>
         </div>
@@ -58,7 +59,7 @@ export const PortfolioInvestmentCard: React.FC<InvestmentCardProps> = ({
             disabled={isWithdrawing}
             className={`px-8 py-4 ${isWithdrawing ? 'bg-zinc-200' : 'bg-black text-grass-primary'} border-2 border-black font-black uppercase text-[10px] tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center gap-2`}
           >
-            {isWithdrawing ? <RefreshCw size={14} className="animate-spin" /> : 'KLAIM HASIL'}
+            {isWithdrawing ? <RefreshCw size={14} className="animate-spin" /> : 'CLAIM PROCEEDS'}
           </button>
         </div>
       </div>

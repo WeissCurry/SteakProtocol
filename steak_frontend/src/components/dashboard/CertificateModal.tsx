@@ -1,11 +1,17 @@
-import React from 'react';
 import { X, Download, CheckCircle2, ExternalLink } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
+
+export interface StakeInfo {
+  amount: number;
+  apy?: string;
+  txSig?: string;
+  timestamp: number;
+}
 
 interface CertificateModalProps {
   isOpen: boolean;
   onClose: () => void;
-  stakeInfo: any;
+  stakeInfo: StakeInfo | null;
   maturityDate: string;
   certificateId: string;
 }
@@ -55,7 +61,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 <p className="text-xs font-black uppercase text-grass-subtext mb-1 opacity-60">
                   Certificate ID
                 </p>
-                <h4 className="text-xl font-mono font-black break-all uppercase">{certificateId}</h4>
+                <h4 className="text-xl font-mono font-black break-all uppercase">
+                  {certificateId}
+                </h4>
               </div>
 
               <div className="grid grid-cols-2 gap-8">
@@ -64,7 +72,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                     Amount Invested
                   </p>
                   <p className="text-2xl font-black italic">
-                    {stakeInfo.amount.toLocaleString('id-ID')} IDRX
+                    {stakeInfo.amount.toLocaleString('en-US')} IDRX
                   </p>
                 </div>
                 <div>

@@ -1,3 +1,3 @@
-export * from './dashboard/Sidebar';
-export * from './dashboard/Header';
-export * from './dashboard/Cards';
+export { Sidebar } from './dashboard/Sidebar';
+export { Header } from './dashboard/Header';
+export { StatsRow, SukukCard, PerformanceCard } from './dashboard/Cards';

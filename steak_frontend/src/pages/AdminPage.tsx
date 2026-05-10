@@ -1,9 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import {
-  ShieldCheck,
-  RefreshCw,
-  Plus,
-} from 'lucide-react';
+import { SeriesFormData } from '../components/admin/CreateSeriesModal';
+import { ShieldCheck, RefreshCw, Plus } from 'lucide-react';
 
 import { useBatches } from '../hooks/useBatches';
 import { useSteakProgram } from '../hooks/useSteakProgram';
@@ -14,6 +11,11 @@ import NotificationModal from '../components/NotificationModal';
 import { AdminStats } from '../components/admin/AdminStats';
 import { AdminBatchCard } from '../components/admin/AdminBatchCard';
 import { CreateSeriesModal } from '../components/admin/CreateSeriesModal';
+
+const NOW = Date.now();
+const INITIAL_OPEN_START = new Date(NOW).toISOString().split('T')[0];
+const INITIAL_OPEN_END = new Date(NOW + 7 * 86400000).toISOString().split('T')[0];
+const INITIAL_STAKING_START = new Date(NOW + 8 * 86400000).toISOString().split('T')[0];
 
 const AdminPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,16 +46,16 @@ const AdminPage = () => {
   const program = useSteakProgram();
   const { publicKey } = useWallet();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SeriesFormData>({
     name: 'SS001',
     duration: 30,
     quota: 1000000,
     goats: 0,
     cows: 0,
     profit: 50000,
-    openStart: new Date().toISOString().split('T')[0],
-    openEnd: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
-    stakingStart: new Date(Date.now() + 8 * 86400000).toISOString().split('T')[0],
+    openStart: INITIAL_OPEN_START,
+    openEnd: INITIAL_OPEN_END,
+    stakingStart: INITIAL_STAKING_START,
   });
 
   const stakingEnd = useMemo(() => {
@@ -64,22 +66,26 @@ const AdminPage = () => {
 
   const batches = useMemo(() => {
     if (!blockchainBatches) return [];
-    return blockchainBatches.map((b) => ({
-      id: `SS${String(b.account.batchId).padStart(3, '0')}`,
-      batchId: Number(b.account.batchId),
-      totalStaked: Number(b.account.totalStaked) / 10 ** 9,
-      maxCapacity: Number(b.account.maxCapacity) / 10 ** 9,
-      lockDuration: Number(b.account.lockDuration),
-      apy: (Number(b.account.apy) / 100).toFixed(2) + '%',
-      isActive: b.account.isActive,
-      isHarvested: b.account.isHarvested,
-      goats: Number(b.account.goats),
-      cows: Number(b.account.cows),
-      name: b.account.name,
-      estimatedProfit: (((Number(b.account.maxCapacity) / 10 ** 9) * Number(b.account.apy)) / 10000) * (Number(b.account.lockDuration) / 365),
-      startTime: b.account.startTime ? Number(b.account.startTime) : null,
-      publicKey: b.publicKey,
-    })).sort((a, b) => b.batchId - a.batchId);
+    return blockchainBatches
+      .map((b) => ({
+        id: `SS${String(b.account.batchId).padStart(3, '0')}`,
+        batchId: Number(b.account.batchId),
+        totalStaked: Number(b.account.totalStaked) / 10 ** 9,
+        maxCapacity: Number(b.account.maxCapacity) / 10 ** 9,
+        lockDuration: Number(b.account.lockDuration),
+        apy: (Number(b.account.apy) / 100).toFixed(2) + '%',
+        isActive: b.account.isActive,
+        isHarvested: b.account.isHarvested,
+        goats: Number(b.account.goats),
+        cows: Number(b.account.cows),
+        name: b.account.name,
+        estimatedProfit:
+          (((Number(b.account.maxCapacity) / 10 ** 9) * Number(b.account.apy)) / 10000) *
+          (Number(b.account.lockDuration) / 365),
+        startTime: b.account.startTime ? Number(b.account.startTime) : null,
+        publicKey: b.publicKey,
+      }))
+      .sort((a, b) => b.batchId - a.batchId);
   }, [blockchainBatches]);
 
   const adminStats = useMemo(() => {
@@ -90,7 +96,7 @@ const AdminPage = () => {
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
     const profitThisMonth = batches
-      .filter(b => {
+      .filter((b) => {
         if (!b.startTime) return false;
         const d = new Date(b.startTime * 1000);
         return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
@@ -98,10 +104,10 @@ const AdminPage = () => {
       .reduce((sum, b) => sum + b.estimatedProfit, 0);
 
     const pendingDeposits = batches
-      .filter(b => b.isActive && !b.isHarvested)
+      .filter((b) => b.isActive && !b.isHarvested)
       .reduce((sum, b) => sum + (b.maxCapacity + b.estimatedProfit), 0);
 
-    const countLast3Months = batches.filter(b => {
+    const countLast3Months = batches.filter((b) => {
       if (!b.startTime) return true;
       return new Date(b.startTime * 1000) >= threeMonthsAgo;
     }).length;
@@ -115,11 +121,17 @@ const AdminPage = () => {
     const checkInit = async () => {
       if (!program) return;
       try {
-        const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('global_state')], program.programId);
-        // @ts-ignore - Handle possible naming mismatch in IDL
-        const account = await program.account.globalState?.fetch(globalStatePda) || await (program.account as any).global_state?.fetch(globalStatePda);
+        const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync(
+          [Buffer.from('global_state')],
+          program.programId,
+        );
+        const account =
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (await (program.account as any).globalState?.fetch(globalStatePda)) ||
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (await (program.account as any).global_state?.fetch(globalStatePda));
         setIsInitialized(!!account);
-      } catch (e) {
+      } catch {
         setIsInitialized(false);
       }
     };
@@ -130,10 +142,15 @@ const AdminPage = () => {
     if (batches && batches.length >= 0) {
       const maxId = batches.reduce((max, b) => Math.max(max, b.batchId), 0);
       const nextId = maxId + 1;
-      setFormData(prev => ({
-        ...prev,
-        name: `SS${String(nextId).padStart(3, '0')}`
-      }));
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFormData((prev: SeriesFormData) => {
+        const nextName = `SS${String(nextId).padStart(3, '0')}`;
+        if (prev.name === nextName) return prev;
+        return {
+          ...prev,
+          name: nextName,
+        };
+      });
     }
   }, [batches]);
 
@@ -147,8 +164,11 @@ const AdminPage = () => {
     if (!program || !publicKey) return;
     try {
       setIsLoading(true);
-      const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('global_state')], program.programId);
-      
+      const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from('global_state')],
+        program.programId,
+      );
+
       await program.methods
         .initializeProtocol()
         .accounts({
@@ -190,7 +210,6 @@ const AdminPage = () => {
 
       const batchId = new anchor.BN(currentId);
       const apyBP = new anchor.BN(Math.floor(Number(calculatedApy) * 100));
-      const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('global_state')], program.programId);
       const IDRX_MINT = new anchor.web3.PublicKey('CHyZcyVYWNpXDxHtuLEZyw7xwyPCkj9G8DzLj3gvtsPx');
       const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
         [Buffer.from('batch_vault'), batchId.toArrayLike(Buffer, 'le', 8)],
@@ -205,7 +224,7 @@ const AdminPage = () => {
           apyBP,
           new anchor.BN(formData.goats),
           new anchor.BN(formData.cows),
-          formData.name
+          formData.name,
         )
         .accounts({
           batch: batchPda,
@@ -220,7 +239,10 @@ const AdminPage = () => {
 
       await refetch();
       setShowCreateModal(false);
-      showSuccess('Series Created!', `Batch ${currentId} ("${formData.name}") has been successfully deployed. 🐮🌿`);
+      showSuccess(
+        'Series Created!',
+        `Batch ${currentId} ("${formData.name}") has been successfully deployed. 🐮🌿`,
+      );
     } catch (error) {
       console.error(error);
       showError('Deployment Failed', error instanceof Error ? error.message : String(error));
@@ -233,8 +255,14 @@ const AdminPage = () => {
     if (!program || !publicKey) return;
     try {
       setIsLoading(true);
-      const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('global_state')], program.programId);
-      const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('batch_vault'), new anchor.BN(batchId).toArrayLike(Buffer, 'le', 8)], program.programId);
+      const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from('global_state')],
+        program.programId,
+      );
+      const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from('batch_vault'), new anchor.BN(batchId).toArrayLike(Buffer, 'le', 8)],
+        program.programId,
+      );
       const IDRX_MINT = new anchor.web3.PublicKey('CHyZcyVYWNpXDxHtuLEZyw7xwyPCkj9G8DzLj3gvtsPx');
       const { getAssociatedTokenAddress } = await import('@solana/spl-token');
       const adminAta = await getAssociatedTokenAddress(IDRX_MINT, publicKey);
@@ -265,8 +293,14 @@ const AdminPage = () => {
     if (!program || !publicKey) return;
     try {
       setIsLoading(true);
-      const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('global_state')], program.programId);
-      const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from('batch_vault'), new anchor.BN(batchId).toArrayLike(Buffer, 'le', 8)], program.programId);
+      const [globalStatePda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from('global_state')],
+        program.programId,
+      );
+      const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from('batch_vault'), new anchor.BN(batchId).toArrayLike(Buffer, 'le', 8)],
+        program.programId,
+      );
       const IDRX_MINT = new anchor.web3.PublicKey('CHyZcyVYWNpXDxHtuLEZyw7xwyPCkj9G8DzLj3gvtsPx');
       const { getAssociatedTokenAddress } = await import('@solana/spl-token');
       const adminAta = await getAssociatedTokenAddress(IDRX_MINT, publicKey);
@@ -337,19 +371,30 @@ const AdminPage = () => {
       <div className="bg-white border-2 border-black rounded-[24px] p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] min-h-[400px]">
         <div className="flex items-center justify-between mb-6 pb-3 border-b-2 border-black border-dashed">
           <h3 className="text-xl font-black uppercase tracking-tighter italic">Overview</h3>
-          <button onClick={() => refetch()} className="flex items-center gap-2 text-[8px] font-black uppercase text-grass-primary bg-black px-3 py-1 rounded-full hover:scale-105 transition-transform">
+          <button
+            onClick={() => refetch()}
+            className="flex items-center gap-2 text-[8px] font-black uppercase text-grass-primary bg-black px-3 py-1 rounded-full hover:scale-105 transition-transform"
+          >
             <RefreshCw size={10} className={isLoading ? 'animate-spin' : ''} /> Refresh
           </button>
         </div>
 
         <div className="grid grid-cols-1 gap-4">
           {batches.map((batch) => (
-            <AdminBatchCard key={batch.batchId} batch={batch} isLoading={isLoading} onStart={handleStartBatch} onHarvest={handleHarvestBatch} />
+            <AdminBatchCard
+              key={batch.batchId}
+              batch={batch}
+              isLoading={isLoading}
+              onStart={handleStartBatch}
+              onHarvest={handleHarvestBatch}
+            />
           ))}
           {batches.length === 0 && (
             <div className="py-20 text-center flex flex-col items-center">
               <RefreshCw size={40} className="text-grass-subtext mb-4 opacity-20" />
-              <p className="font-black uppercase text-grass-subtext text-[10px] tracking-widest">No active batches.</p>
+              <p className="font-black uppercase text-grass-subtext text-[10px] tracking-widest">
+                No active batches.
+              </p>
             </div>
           )}
         </div>

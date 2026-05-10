@@ -1,15 +1,21 @@
 import React from 'react';
 import { Play, Wallet, CheckCircle2, TrendingUp, Calendar } from 'lucide-react';
 import * as anchor from '@coral-xyz/anchor';
+import { MappedBatch } from '../../types/steak';
 
 interface AdminBatchCardProps {
-  batch: any;
+  batch: MappedBatch;
   isLoading: boolean;
   onStart: (batchId: number, publicKey: anchor.web3.PublicKey) => void;
   onHarvest: (batchId: number, publicKey: anchor.web3.PublicKey) => void;
 }
 
-export const AdminBatchCard: React.FC<AdminBatchCardProps> = ({ batch, isLoading, onStart, onHarvest }) => {
+export const AdminBatchCard: React.FC<AdminBatchCardProps> = ({
+  batch,
+  isLoading,
+  onStart,
+  onHarvest,
+}) => {
   const percentage = Math.min(100, (batch.totalStaked / batch.maxCapacity) * 100);
 
   return (
@@ -46,7 +52,7 @@ export const AdminBatchCard: React.FC<AdminBatchCardProps> = ({ batch, isLoading
           {batch.isActive && (
             <div className="flex flex-col items-end gap-1.5">
               <div className="text-[8px] font-black uppercase text-amber-600 bg-amber-50 px-2 py-1 border border-amber-200 rounded-lg shadow-[1px_1px_0px_0px_rgba(251,191,36,1)]">
-                Due: {(batch.maxCapacity + batch.estimatedProfit).toLocaleString('en-US')}
+                Due: {(batch.maxCapacity + (batch.estimatedProfit || 0)).toLocaleString('en-US')}
               </div>
               <button
                 onClick={() => onHarvest(batch.batchId, batch.publicKey)}
@@ -69,7 +75,8 @@ export const AdminBatchCard: React.FC<AdminBatchCardProps> = ({ batch, isLoading
         <div className="flex justify-between text-[8px] font-black uppercase tracking-widest">
           <span className="text-grass-subtext">Funding</span>
           <span className="text-black">
-            {batch.totalStaked.toLocaleString('en-US')} / {batch.maxCapacity.toLocaleString('en-US')}
+            {batch.totalStaked.toLocaleString('en-US')} /{' '}
+            {batch.maxCapacity.toLocaleString('en-US')}
           </span>
         </div>
         <div className="h-3 w-full bg-zinc-100 border-2 border-black rounded-full overflow-hidden p-[1px]">
